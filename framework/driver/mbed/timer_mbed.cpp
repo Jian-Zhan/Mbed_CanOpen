@@ -30,7 +30,7 @@ Ticker  TimerTicker_CAN;
 TIMEVAL TimerAlarm_CAN;
 TIMEVAL TimerCounter_CAN;
 
-static TIMEVAL last_time_set = TIMEVAL_MAX;
+static TIMEVAL last_time_set = 0;
 
 void canTimerTick(void);
 
@@ -48,7 +48,7 @@ void setTimer(TIMEVAL value)
 
 TIMEVAL getElapsedTime(void)
 {
-    unsigned long timer = TimerCounter_CAN;	// Copy the value of the running timer
+    TIMEVAL timer = TimerCounter_CAN;	// Copy the value of the running timer
     return timer > last_time_set ? timer - last_time_set : last_time_set - timer;
 }
 

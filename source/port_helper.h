@@ -1,14 +1,11 @@
-
-
 #ifndef PORT_HELPER_H
 #define PORT_HELPER_H
 
-#include "canfestival.h"
 #include "mbed.h"
+#include "canfestival.h"
 
-void initHelper();
-void serviceHelper();
-void serviceCOMCommands();
+void initSerial();
+void blinkLED();
 
 void printMsg(Message& msg);
 void printMsg(CANMessage& msg);

@@ -149,7 +149,7 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     UNS32 mbed_slave_obj1016[]={0};
 
 /* index 0x1017 :   Producer Heartbeat Time. */
-                    UNS16 mbed_slave_obj1017 = 0xFF;
+                    UNS16 mbed_slave_obj1017 = 1000;
                     ODCallback_t mbed_slave_Index1017_callbacks[] = 
                      {
                        NULL,

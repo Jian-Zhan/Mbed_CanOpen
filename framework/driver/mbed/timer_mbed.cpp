@@ -32,6 +32,8 @@ TIMEVAL TimerCounter_CAN;
 
 static TIMEVAL last_time_set = TIMEVAL_MAX;
 
+void canTimerTick(void);
+
 void initTimer(void)
 {
     TimerCounter_CAN = 0;

@@ -35,9 +35,11 @@ extern "C"{
 #endif
 
 extern void initTimer(void);
+
+extern UNS8 canInit(void);
 extern UNS8 canSend(CAN_PORT notused, Message *m);
+extern UNS8 canReceive(Message *m);
 extern UNS8 canChangeBaudRate(CAN_PORT port, char* baud);
-extern void canTimerTick(void);
 
 #ifdef __cplusplus
 }

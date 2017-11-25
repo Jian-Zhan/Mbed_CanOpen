@@ -24,26 +24,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //#define DEBUG_WAR_CONSOLE_ON
 //#define DEBUG_ERR_CONSOLE_ON
 
-#include "can_mbed.h"
+#include "mbed.h"
 #include "canfestival.h"
 
 volatile unsigned char msg_received = 0;
-// initialize the CAN object from the mbed api
-CAN CANopen(CAN1_RX, CAN1_TX);
+CAN CANopen(CAN1_RX, CAN1_TX, CAN_BAUDRATE);
 
-unsigned char canInit(unsigned int bitrate)
-/******************************************************************************
-Initialize the hardware to send and receive CAN messages 
-INPUT    bitrate        bitrate in kilobit
-OUTPUT    1 if successful    
-******************************************************************************/
+unsigned char canInit(void)
 {
-      // make sure the requested baudrate is supported
-    if (CANopen.frequency(bitrate*1000) == 0){
-          return 0;
-    }
-      // desired baud was set
-    return 1;
+    CANopen.reset();
+    return 0;
 }
 
 unsigned char canSend(CAN_PORT notused, Message *m)

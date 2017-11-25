@@ -40,7 +40,6 @@ Short description:
 #include "mbed.h"
 #include "main.h"
 #include "canfestival.h"
-#include "can_mbed.h"
 #include "mbed_slave.h"
 #include "ds401.h"
 #include "port_helper.h"
@@ -67,7 +66,7 @@ int main()
     SysTimer.attach_us(&serviceSysTimer, CYCLE_TIME);
 
     // start of CANfestival stack calls
-    canInit(1000);              // Initialize the CANopen bus
+    canInit();              // Initialize the CANopen bus
     initTimer();                // Start timer for the CANopen stack
 
     // Init the state

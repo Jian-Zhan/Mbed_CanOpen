@@ -4,7 +4,8 @@ openocd \
     -c init \
     -c adapter_khz 100 \
     -c targets \
-    -c "reset run" \
+    -c "reset_config none separate" \
+    -c "reset" \
     -c "sleep 100" \
     -c "halt" \
     -c "sleep 100" \

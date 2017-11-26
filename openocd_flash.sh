@@ -4,11 +4,7 @@ openocd \
     -c init \
     -c adapter_khz 100 \
     -c targets \
-    -c "reset_config none separate" \
-    -c "reset" \
-    -c "sleep 100" \
-    -c "halt" \
-    -c "sleep 100" \
+    -c "reset halt" \
     -c "flash write_image erase BUILD/TAOBAO_F103RB/GCC_ARM/Mbed_CanOpen.elf" \
     -c "verify_image BUILD/TAOBAO_F103RB/GCC_ARM/Mbed_CanOpen.elf" \
     -c "reset run" -c shutdown

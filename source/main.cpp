@@ -24,7 +24,7 @@ static Message m = Message_Initializer;
 int main() 
 {
     // initialize the helper code - just for debugging
-    initSerial();
+    printf("CANopen Client\n");
     SysTimer.attach_us(&blinkLED, 1000);
 
     // start of CANfestival stack calls
@@ -34,7 +34,7 @@ int main()
     // Init the state
     setNodeId(&mbed_slave_Data, CAN_NODE_ID);
     setState(&mbed_slave_Data, Initialisation);
-    
+
     // just keep looping
     while(1) {
         // a message was received - pass it to the CANstack

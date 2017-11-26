@@ -1,13 +1,6 @@
 #include "port_helper.h"
 
-Serial Debug(USBTX, USBRX);
 DigitalOut running_status(LED1);
-
-void initSerial()
-{
-    Debug.baud(115200);
-    printf(" CANopen port of CANfestival slave node (DS-401) \r\n");
-}
 
 void blinkLED()
 {

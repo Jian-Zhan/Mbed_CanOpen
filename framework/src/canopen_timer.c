@@ -124,7 +124,7 @@ void TimeDispatch(void)
     TIMEVAL next_wakeup = TIMEVAL_MAX; /* used to compute when should normaly occur next wakeup */
     /* First run : change timer state depending on time */
     /* Get time since timer signal */
-    UNS32 overrun = (UNS32)getElapsedTime();
+    TIMEVAL overrun = getElapsedTime();
 
     TIMEVAL real_total_sleep_time = total_sleep_time + overrun;
 

@@ -48,14 +48,14 @@ void setTimer(TIMEVAL value)
 
 TIMEVAL getElapsedTime(void)
 {
-    TIMEVAL timer = TimerCounter_CAN;	// Copy the value of the running timer
-    return timer > last_time_set ? timer - last_time_set : last_time_set - timer;
+    // Make sure TIMEVAL is an unsigned type
+    return TimerCounter_CAN - last_time_set;
 }
 
 void canTimerTick(void)
 {
     TimerCounter_CAN++;
-    if(TimerCounter_CAN == TimerAlarm_CAN) {
+    if (TimerCounter_CAN == TimerAlarm_CAN) {
         last_time_set = TimerCounter_CAN;
         TimeDispatch();
     }

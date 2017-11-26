@@ -12,6 +12,7 @@
 #include "mbed_slave.h"
 #include "ds401.h"
 #include "port_helper.h"
+#include "eeprom_flash.h"
 
 #define CAN_NODE_ID 0x04
 
@@ -25,6 +26,7 @@ int main()
 {
     // initialize the helper code - just for debugging
     printf("CANopen Client\n");
+    printf("EEPROM %d\n", readEEPROMWord(0));
     SysTimer.attach_us(&blinkLED, 1000);
 
     // start of CANfestival stack calls
@@ -47,6 +49,10 @@ int main()
             __enable_irq();
             // print it to the console for debugging
             printMsg(m);
+
+            enableEEPROMWriting();
+            writeEEPROMWord(0, m.cob_id);
+            disableEEPROMWriting();
         }
     }
 }

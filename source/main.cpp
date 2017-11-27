@@ -23,6 +23,22 @@ Ticker SysTimer;
 // read a can message from the stack
 static Message m = Message_Initializer;
 
+void saveConfig()
+{
+    UNS16 reg;
+    int i;
+    volatile int len = 0;
+
+    enableEEPROMWriting();
+
+    for (i = 0; i < len; i++) {
+        reg = *(TestSlave_to_be_saved[i].pointer);
+        writeEEPROMWord(i, reg);
+    }
+
+    disableEEPROMWriting();
+}
+
 int main() 
 {
     // initialize the helper code - just for debugging
@@ -53,10 +69,7 @@ int main()
             __enable_irq();
             // print it to the console for debugging
             printMsg(m);
-
-            enableEEPROMWriting();
-            writeEEPROMWord(0, m.cob_id);
-            disableEEPROMWriting();
+            saveConfig();
         }
 
         // Modbus poll

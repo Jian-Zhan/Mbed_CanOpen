@@ -36,7 +36,7 @@ typedef struct struct_CO_Data CO_Data;
 #include "def.h"
 #include "canopen_can.h"
 #include "objdictdef.h"
-#include "objacces.h"
+#include "objaccess.h"
 #include "sdo.h"
 #include "pdo.h"
 #include "states.h"

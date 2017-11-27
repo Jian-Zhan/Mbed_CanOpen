@@ -36,8 +36,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *  @ingroup userapi
  */
  
-#ifndef __objacces_h__
-#define __objacces_h__
+#ifndef __objaccess_h__
+#define __objaccess_h__
 
 #include <applicfg.h>
 
@@ -284,4 +284,4 @@ UNS32 RegisterSetODentryCallBack(CO_Data* d, UNS16 wIndex, UNS8 bSubindex, ODCal
 }
 #endif
 
-#endif /* __objacces_h__ */
+#endif /* __objaccess_h__ */

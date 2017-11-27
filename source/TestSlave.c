@@ -6,19 +6,76 @@
 /**************************************************************************/
 /* Declaration of mapped variables                                        */
 /**************************************************************************/
-UNS8 SlaveMap1 = 0x0;		/* Mapped at index 0x2000, subindex 0x00 */
-UNS8 SlaveMap2 = 0x0;		/* Mapped at index 0x2001, subindex 0x00 */
-UNS8 SlaveMap3 = 0x0;		/* Mapped at index 0x2002, subindex 0x00 */
-UNS8 SlaveMap4 = 0x0;		/* Mapped at index 0x2003, subindex 0x00 */
-UNS8 SlaveMap5 = 0x0;		/* Mapped at index 0x2004, subindex 0x00 */
-UNS8 SlaveMap6 = 0x0;		/* Mapped at index 0x2005, subindex 0x00 */
-UNS8 SlaveMap7 = 0x0;		/* Mapped at index 0x2006, subindex 0x00 */
-UNS8 SlaveMap8 = 0x0;		/* Mapped at index 0x2007, subindex 0x00 */
-UNS8 SlaveMap9 = 0x0;		/* Mapped at index 0x2008, subindex 0x00 */
-UNS32 SlaveMap10 = 0x0;		/* Mapped at index 0x2009, subindex 0x00 */
-UNS16 SlaveMap11 = 0x0;		/* Mapped at index 0x200A, subindex 0x00 */
-INTEGER16 SlaveMap12 = 0x0;		/* Mapped at index 0x200B, subindex 0x00 */
-INTEGER16 SlaveMap13 = 0x4D2;		/* Mapped at index 0x200C, subindex 0x00 */
+UNS16 CANopen_Node_ID = 0x1;		/* Mapped at index 0x2000, subindex 0x00 */
+UNS32 CANopen_Baud_Rate = 0xF4240;		/* Mapped at index 0x2001, subindex 0x00 */
+UNS16 Modbus_Node_ID = 0x1;		/* Mapped at index 0x2002, subindex 0x00 */
+UNS32 Modbus_Baud_Rate = 0xF4240;		/* Mapped at index 0x2003, subindex 0x00 */
+UNS8 Read_Inputs_8_Bit[] =		/* Mapped at index 0x6000, subindex 0x01 - 0x01 */
+  {
+    0x0	/* 0 */
+  };
+UNS8 Read_Input_Bit_0x1_to_0x80[] =		/* Mapped at index 0x6020, subindex 0x01 - 0x08 */
+  {
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0	/* False */
+  };
+UNS8 Write_Outputs_8_Bit[] =		/* Mapped at index 0x6200, subindex 0x01 - 0x01 */
+  {
+    0x0	/* 0 */
+  };
+UNS8 Write_Outputs_Bit_1_to_128[] =		/* Mapped at index 0x6220, subindex 0x01 - 0x08 */
+  {
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0,	/* False */
+    0x0	/* False */
+  };
+INTEGER16 Read_Analogue_Input_16_Bit[] =		/* Mapped at index 0x6401, subindex 0x01 - 0x04 */
+  {
+    0x0,	/* 0 */
+    0x0,	/* 0 */
+    0x0,	/* 0 */
+    0x0	/* 0 */
+  };
+INTEGER16 Write_Analogue_Output_16_Bit[] =		/* Mapped at index 0x6411, subindex 0x01 - 0x02 */
+  {
+    0x0,	/* 0 */
+    0x0	/* 0 */
+  };
+REAL32 Analogue_Input_Scaling_Float[] =		/* Mapped at index 0x642F, subindex 0x01 - 0x04 */
+  {
+    0.000000,
+    0.000000,
+    0.000000,
+    0.000000
+  };
+UNS32 Analogue_Input_SI_unit[] =		/* Mapped at index 0x6430, subindex 0x01 - 0x04 */
+  {
+    0x0,	/* 0 */
+    0x0,	/* 0 */
+    0x0,	/* 0 */
+    0x0	/* 0 */
+  };
+REAL32 Analogue_Output_Scaling_Float[] =		/* Mapped at index 0x6442, subindex 0x01 - 0x02 */
+  {
+    0.000000,
+    0.000000
+  };
+UNS32 Analogue_Output_SI_Unit[] =		/* Mapped at index 0x6450, subindex 0x01 - 0x02 */
+  {
+    0x0,	/* 0 */
+    0x0	/* 0 */
+  };
 
 /**************************************************************************/
 /* Declaration of value range types                                       */
@@ -46,7 +103,7 @@ UNS8 TestSlave_bDeviceNodeId = 0x00;
 
 const UNS8 TestSlave_iam_a_slave = 1;
 
-TIMER_HANDLE TestSlave_heartBeatTimers[1];
+TIMER_HANDLE TestSlave_heartBeatTimers[4] = {TIMER_NONE,TIMER_NONE,TIMER_NONE,TIMER_NONE};
 
 /*
 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -57,10 +114,10 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 */
 
 /* index 0x1000 :   Device Type. */
-                    UNS32 TestSlave_obj1000 = 0x12D;	/* 301 */
+                    UNS32 TestSlave_obj1000 = 0x12;	/* 18 */
                     subindex TestSlave_Index1000[] = 
                      {
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1000, NULL }
+                       { RO|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1000, NULL }
                      };
 
 /* index 0x1001 :   Error Register. */
@@ -70,9 +127,163 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                        { RO, uint8, sizeof (UNS8), (void*)&TestSlave_obj1001, NULL }
                      };
 
-/* index 0x1003 :   Pre-defined Error Field. */
+/* index 0x1003 :   Pre-defined Error Field */
                     UNS8 TestSlave_highestSubIndex_obj1003 = 0; /* number of subindex - 1*/
                     UNS32 TestSlave_obj1003[] = 
+                    {
+                      0x0	/* 0 */
+                    };
+                    subindex TestSlave_Index1003[] = 
+                     {
+                       { RW, valueRange_EMC, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1003, NULL },
+                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1003[0], NULL }
+                     };
+
+/* index 0x1005 :   SYNC COB ID */
+                    UNS32 TestSlave_obj1005 = 0x0;   /* 0 */
+
+/* index 0x1006 :   Communication / Cycle Period */
+                    UNS32 TestSlave_obj1006 = 0x0;   /* 0 */
+
+/* index 0x100C :   Guard Time */ 
+                    UNS16 TestSlave_obj100C = 0x0;   /* 0 */
+
+/* index 0x100D :   Life Time Factor */ 
+                    UNS8 TestSlave_obj100D = 0x0;   /* 0 */
+
+/* index 0x1014 :   Emergency COB ID */
+                    UNS32 TestSlave_obj1014 = 0x80 + 0x00;   /* 128 + NodeID */
+
+/* index 0x1016 :   Consumer Heartbeat Time. */
+                    UNS8 TestSlave_highestSubIndex_obj1016 = 4; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1016[] = 
+                    {
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0	/* 0 */
+                    };
+                    subindex TestSlave_Index1016[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1016, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1016[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1016[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1016[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1016[3], NULL }
+                     };
+
+/* index 0x1017 :   Producer Heartbeat Time. */
+                    UNS16 TestSlave_obj1017 = 0x3E8;	/* 1000 */
+                    subindex TestSlave_Index1017[] = 
+                     {
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1017, NULL }
+                     };
+
+/* index 0x1018 :   Identity. */
+                    UNS8 TestSlave_highestSubIndex_obj1018 = 4; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1018_Vendor_ID = 0x12345678;	/* 305419896 */
+                    UNS32 TestSlave_obj1018_Product_Code = 0xFFFFFFFF;	/* 4294967295 */
+                    UNS32 TestSlave_obj1018_Revision_Number = 0x0;	/* 0 */
+                    UNS32 TestSlave_obj1018_Serial_Number = 0x1;	/* 1 */
+                    subindex TestSlave_Index1018[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1018, NULL },
+                       { RO|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1018_Vendor_ID, NULL },
+                       { RO|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1018_Product_Code, NULL },
+                       { RO|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1018_Revision_Number, NULL },
+                       { RO|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1018_Serial_Number, NULL }
+                     };
+
+/* index 0x1200 :   Server SDO Parameter. */
+                    UNS8 TestSlave_highestSubIndex_obj1200 = 2; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1200_COB_ID_Client_to_Server_Receive_SDO = 0x600;	/* 1536 */
+                    UNS32 TestSlave_obj1200_COB_ID_Server_to_Client_Transmit_SDO = 0x580;	/* 1408 */
+                    subindex TestSlave_Index1200[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1200, NULL },
+                       { RO|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1200_COB_ID_Client_to_Server_Receive_SDO, NULL },
+                       { RO|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1200_COB_ID_Server_to_Client_Transmit_SDO, NULL }
+                     };
+
+/* index 0x1400 :   Receive PDO 1 Parameter. */
+                    UNS8 TestSlave_highestSubIndex_obj1400 = 6; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1400_COB_ID_used_by_PDO = 0x200;	/* 512 */
+                    UNS8 TestSlave_obj1400_Transmission_Type = 0x0;	/* 0 */
+                    UNS16 TestSlave_obj1400_Inhibit_Time = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1400_Compatibility_Entry = 0x0;	/* 0 */
+                    UNS16 TestSlave_obj1400_Event_Timer = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1400_SYNC_start_value = 0x0;	/* 0 */
+                    subindex TestSlave_Index1400[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1400, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1400_COB_ID_used_by_PDO, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1400_Transmission_Type, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1400_Inhibit_Time, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1400_Compatibility_Entry, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1400_Event_Timer, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1400_SYNC_start_value, NULL }
+                     };
+
+/* index 0x1401 :   Receive PDO 2 Parameter. */
+                    UNS8 TestSlave_highestSubIndex_obj1401 = 6; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1401_COB_ID_used_by_PDO = 0x300;	/* 768 */
+                    UNS8 TestSlave_obj1401_Transmission_Type = 0x0;	/* 0 */
+                    UNS16 TestSlave_obj1401_Inhibit_Time = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1401_Compatibility_Entry = 0x0;	/* 0 */
+                    UNS16 TestSlave_obj1401_Event_Timer = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1401_SYNC_start_value = 0x0;	/* 0 */
+                    subindex TestSlave_Index1401[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1401, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1401_COB_ID_used_by_PDO, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1401_Transmission_Type, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1401_Inhibit_Time, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1401_Compatibility_Entry, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1401_Event_Timer, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1401_SYNC_start_value, NULL }
+                     };
+
+/* index 0x1402 :   Receive PDO 3 Parameter. */
+                    UNS8 TestSlave_highestSubIndex_obj1402 = 6; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1402_COB_ID_used_by_PDO = 0x400;	/* 1024 */
+                    UNS8 TestSlave_obj1402_Transmission_Type = 0x0;	/* 0 */
+                    UNS16 TestSlave_obj1402_Inhibit_Time = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1402_Compatibility_Entry = 0x0;	/* 0 */
+                    UNS16 TestSlave_obj1402_Event_Timer = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1402_SYNC_start_value = 0x0;	/* 0 */
+                    subindex TestSlave_Index1402[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1402, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1402_COB_ID_used_by_PDO, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1402_Transmission_Type, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1402_Inhibit_Time, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1402_Compatibility_Entry, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1402_Event_Timer, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1402_SYNC_start_value, NULL }
+                     };
+
+/* index 0x1403 :   Receive PDO 4 Parameter. */
+                    UNS8 TestSlave_highestSubIndex_obj1403 = 6; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1403_COB_ID_used_by_PDO = 0x500;	/* 1280 */
+                    UNS8 TestSlave_obj1403_Transmission_Type = 0x0;	/* 0 */
+                    UNS16 TestSlave_obj1403_Inhibit_Time = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1403_Compatibility_Entry = 0x0;	/* 0 */
+                    UNS16 TestSlave_obj1403_Event_Timer = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1403_SYNC_start_value = 0x0;	/* 0 */
+                    subindex TestSlave_Index1403[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1403, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1403_COB_ID_used_by_PDO, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1403_Transmission_Type, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1403_Inhibit_Time, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1403_Compatibility_Entry, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1403_Event_Timer, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1403_SYNC_start_value, NULL }
+                     };
+
+/* index 0x1600 :   Receive PDO 1 Mapping. */
+                    UNS8 TestSlave_highestSubIndex_obj1600 = 8; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1600[] = 
                     {
                       0x0,	/* 0 */
                       0x0,	/* 0 */
@@ -83,137 +294,124 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                       0x0,	/* 0 */
                       0x0	/* 0 */
                     };
-                    subindex TestSlave_Index1003[] = 
+                    subindex TestSlave_Index1600[] = 
                      {
-                       { RW, valueRange_EMC, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1003, NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1003[0], NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1003[1], NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1003[2], NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1003[3], NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1003[4], NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1003[5], NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1003[6], NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1003[7], NULL }
+                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1600, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1600[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1600[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1600[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1600[3], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1600[4], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1600[5], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1600[6], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1600[7], NULL }
                      };
 
-/* index 0x1005 :   SYNC COB ID. */
-                    UNS32 TestSlave_obj1005 = 0x80;	/* 128 */
-                    subindex TestSlave_Index1005[] = 
+/* index 0x1601 :   Receive PDO 2 Mapping. */
+                    UNS8 TestSlave_highestSubIndex_obj1601 = 8; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1601[] = 
+                    {
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0	/* 0 */
+                    };
+                    subindex TestSlave_Index1601[] = 
                      {
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1005, NULL }
+                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1601, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1601[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1601[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1601[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1601[3], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1601[4], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1601[5], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1601[6], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1601[7], NULL }
                      };
 
-/* index 0x1006 :   Communication / Cycle Period. */
-                    UNS32 TestSlave_obj1006 = 0x0;	/* 0 */
-                    subindex TestSlave_Index1006[] = 
+/* index 0x1602 :   Receive PDO 3 Mapping. */
+                    UNS8 TestSlave_highestSubIndex_obj1602 = 8; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1602[] = 
+                    {
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0	/* 0 */
+                    };
+                    subindex TestSlave_Index1602[] = 
                      {
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1006, NULL }
+                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1602, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1602[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1602[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1602[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1602[3], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1602[4], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1602[5], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1602[6], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1602[7], NULL }
                      };
 
-/* index 0x100C :   Guard Time */ 
-                    UNS16 TestSlave_obj100C = 0x0;   /* 0 */
-
-/* index 0x100D :   Life Time Factor */ 
-                    UNS8 TestSlave_obj100D = 0x0;   /* 0 */
-
-/* index 0x1010 :   Store parameters. */
-                    UNS8 TestSlave_highestSubIndex_obj1010 = 4; /* number of subindex - 1*/
-                    UNS32 TestSlave_obj1010_Save_All_Parameters = 0x0;	/* 0 */
-                    UNS32 TestSlave_obj1010_Save_Communication_Parameters = 0x0;	/* 0 */
-                    UNS32 TestSlave_obj1010_Save_Application_Parameters = 0x0;	/* 0 */
-                    UNS32 TestSlave_obj1010_Save_Manufacturer_Parameters_1 = 0x0;	/* 0 */
-                    subindex TestSlave_Index1010[] = 
+/* index 0x1603 :   Receive PDO 4 Mapping. */
+                    UNS8 TestSlave_highestSubIndex_obj1603 = 8; /* number of subindex - 1*/
+                    UNS32 TestSlave_obj1603[] = 
+                    {
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0	/* 0 */
+                    };
+                    subindex TestSlave_Index1603[] = 
                      {
-                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1010, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1010_Save_All_Parameters, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1010_Save_Communication_Parameters, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1010_Save_Application_Parameters, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1010_Save_Manufacturer_Parameters_1, NULL }
-                     };
-
-/* index 0x1011 :   Restore Default Parameters. */
-                    UNS8 TestSlave_highestSubIndex_obj1011 = 4; /* number of subindex - 1*/
-                    UNS32 TestSlave_obj1011_Restore_All_Default_Parameters = 0x0;	/* 0 */
-                    UNS32 TestSlave_obj1011_Restore_Communication_Default_Parameters = 0x0;	/* 0 */
-                    UNS32 TestSlave_obj1011_Restore_Application_Default_Parameters = 0x0;	/* 0 */
-                    UNS32 TestSlave_obj1011_Restore_Manufacturer_Defined_Default_Parameters_1 = 0x0;	/* 0 */
-                    subindex TestSlave_Index1011[] = 
-                     {
-                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1011, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1011_Restore_All_Default_Parameters, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1011_Restore_Communication_Default_Parameters, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1011_Restore_Application_Default_Parameters, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1011_Restore_Manufacturer_Defined_Default_Parameters_1, NULL }
-                     };
-
-/* index 0x1014 :   Emergency COB ID. */
-                    UNS32 TestSlave_obj1014 = 0x80;	/* 128 */
-                    subindex TestSlave_Index1014[] = 
-                     {
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1014, NULL }
-                     };
-
-/* index 0x1016 :   Consumer Heartbeat Time */
-                    UNS8 TestSlave_highestSubIndex_obj1016 = 0;
-                    UNS32 TestSlave_obj1016[]={0};
-
-/* index 0x1017 :   Producer Heartbeat Time. */
-                    UNS16 TestSlave_obj1017 = 0x0;	/* 0 */
-                    subindex TestSlave_Index1017[] = 
-                     {
-                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1017, NULL }
-                     };
-
-/* index 0x1018 :   Identity. */
-                    UNS8 TestSlave_highestSubIndex_obj1018 = 4; /* number of subindex - 1*/
-                    UNS32 TestSlave_obj1018_Vendor_ID = 0x12345678;	/* 305419896 */
-                    UNS32 TestSlave_obj1018_Product_Code = 0x90123456;	/* 2417112150 */
-                    UNS32 TestSlave_obj1018_Revision_Number = 0x78901234;	/* 2022707764 */
-                    UNS32 TestSlave_obj1018_Serial_Number = 0x56789012;	/* 1450741778 */
-                    subindex TestSlave_Index1018[] = 
-                     {
-                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1018, NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1018_Vendor_ID, NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1018_Product_Code, NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1018_Revision_Number, NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1018_Serial_Number, NULL }
-                     };
-
-/* index 0x1200 :   Server SDO Parameter. */
-                    UNS8 TestSlave_highestSubIndex_obj1200 = 2; /* number of subindex - 1*/
-                    UNS32 TestSlave_obj1200_COB_ID_Client_to_Server_Receive_SDO = 0x600;	/* 1536 */
-                    UNS32 TestSlave_obj1200_COB_ID_Server_to_Client_Transmit_SDO = 0x580;	/* 1408 */
-                    subindex TestSlave_Index1200[] = 
-                     {
-                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1200, NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1200_COB_ID_Client_to_Server_Receive_SDO, NULL },
-                       { RO, uint32, sizeof (UNS32), (void*)&TestSlave_obj1200_COB_ID_Server_to_Client_Transmit_SDO, NULL }
+                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1603, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1603[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1603[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1603[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1603[3], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1603[4], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1603[5], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1603[6], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1603[7], NULL }
                      };
 
 /* index 0x1800 :   Transmit PDO 1 Parameter. */
-                    UNS8 TestSlave_highestSubIndex_obj1800 = 5; /* number of subindex - 1*/
+                    UNS8 TestSlave_highestSubIndex_obj1800 = 6; /* number of subindex - 1*/
                     UNS32 TestSlave_obj1800_COB_ID_used_by_PDO = 0x180;	/* 384 */
                     UNS8 TestSlave_obj1800_Transmission_Type = 0x0;	/* 0 */
                     UNS16 TestSlave_obj1800_Inhibit_Time = 0x0;	/* 0 */
                     UNS8 TestSlave_obj1800_Compatibility_Entry = 0x0;	/* 0 */
                     UNS16 TestSlave_obj1800_Event_Timer = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1800_SYNC_start_value = 0x0;	/* 0 */
                     subindex TestSlave_Index1800[] = 
                      {
                        { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1800, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1800_COB_ID_used_by_PDO, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1800_COB_ID_used_by_PDO, NULL },
                        { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1800_Transmission_Type, NULL },
                        { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1800_Inhibit_Time, NULL },
-                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1800_Compatibility_Entry, NULL },
-                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1800_Event_Timer, NULL }
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1800_Compatibility_Entry, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1800_Event_Timer, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1800_SYNC_start_value, NULL }
                      };
 
 /* index 0x1801 :   Transmit PDO 2 Parameter. */
-                    UNS8 TestSlave_highestSubIndex_obj1801 = 5; /* number of subindex - 1*/
+                    UNS8 TestSlave_highestSubIndex_obj1801 = 6; /* number of subindex - 1*/
                     UNS32 TestSlave_obj1801_COB_ID_used_by_PDO = 0x280;	/* 640 */
                     UNS8 TestSlave_obj1801_Transmission_Type = 0x0;	/* 0 */
                     UNS16 TestSlave_obj1801_Inhibit_Time = 0x0;	/* 0 */
                     UNS8 TestSlave_obj1801_Compatibility_Entry = 0x0;	/* 0 */
                     UNS16 TestSlave_obj1801_Event_Timer = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1801_SYNC_start_value = 0x0;	/* 0 */
                     subindex TestSlave_Index1801[] = 
                      {
                        { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1801, NULL },
@@ -221,214 +419,280 @@ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                        { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1801_Transmission_Type, NULL },
                        { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1801_Inhibit_Time, NULL },
                        { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1801_Compatibility_Entry, NULL },
-                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1801_Event_Timer, NULL }
+                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1801_Event_Timer, NULL },
+                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1801_SYNC_start_value, NULL }
                      };
 
 /* index 0x1802 :   Transmit PDO 3 Parameter. */
-                    UNS8 TestSlave_highestSubIndex_obj1802 = 5; /* number of subindex - 1*/
+                    UNS8 TestSlave_highestSubIndex_obj1802 = 6; /* number of subindex - 1*/
                     UNS32 TestSlave_obj1802_COB_ID_used_by_PDO = 0x380;	/* 896 */
-                    UNS8 TestSlave_obj1802_Transmission_Type = 0xFF;	/* 255 */
-                    UNS16 TestSlave_obj1802_Inhibit_Time = 0x1388;	/* 5000 */
+                    UNS8 TestSlave_obj1802_Transmission_Type = 0x0;	/* 0 */
+                    UNS16 TestSlave_obj1802_Inhibit_Time = 0x0;	/* 0 */
                     UNS8 TestSlave_obj1802_Compatibility_Entry = 0x0;	/* 0 */
-                    UNS16 TestSlave_obj1802_Event_Timer = 0x3E8;	/* 1000 */
+                    UNS16 TestSlave_obj1802_Event_Timer = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1802_SYNC_start_value = 0x0;	/* 0 */
                     subindex TestSlave_Index1802[] = 
                      {
                        { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1802, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1802_COB_ID_used_by_PDO, NULL },
-                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1802_Transmission_Type, NULL },
-                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1802_Inhibit_Time, NULL },
-                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1802_Compatibility_Entry, NULL },
-                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1802_Event_Timer, NULL }
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1802_COB_ID_used_by_PDO, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1802_Transmission_Type, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1802_Inhibit_Time, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1802_Compatibility_Entry, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1802_Event_Timer, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1802_SYNC_start_value, NULL }
                      };
 
 /* index 0x1803 :   Transmit PDO 4 Parameter. */
-                    UNS8 TestSlave_highestSubIndex_obj1803 = 5; /* number of subindex - 1*/
+                    UNS8 TestSlave_highestSubIndex_obj1803 = 6; /* number of subindex - 1*/
                     UNS32 TestSlave_obj1803_COB_ID_used_by_PDO = 0x480;	/* 1152 */
-                    UNS8 TestSlave_obj1803_Transmission_Type = 0xFC;	/* 252 */
+                    UNS8 TestSlave_obj1803_Transmission_Type = 0x0;	/* 0 */
                     UNS16 TestSlave_obj1803_Inhibit_Time = 0x0;	/* 0 */
                     UNS8 TestSlave_obj1803_Compatibility_Entry = 0x0;	/* 0 */
                     UNS16 TestSlave_obj1803_Event_Timer = 0x0;	/* 0 */
+                    UNS8 TestSlave_obj1803_SYNC_start_value = 0x0;	/* 0 */
                     subindex TestSlave_Index1803[] = 
                      {
                        { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1803, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1803_COB_ID_used_by_PDO, NULL },
-                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1803_Transmission_Type, NULL },
-                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1803_Inhibit_Time, NULL },
-                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1803_Compatibility_Entry, NULL },
-                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1803_Event_Timer, NULL }
-                     };
-
-/* index 0x1804 :   Transmit PDO 5 Parameter. */
-                    UNS8 TestSlave_highestSubIndex_obj1804 = 5; /* number of subindex - 1*/
-                    UNS32 TestSlave_obj1804_COB_ID_used_by_PDO = 0x401;	/* 1025 */
-                    UNS8 TestSlave_obj1804_Transmission_Type = 0xFD;	/* 253 */
-                    UNS16 TestSlave_obj1804_Inhibit_Time = 0x0;	/* 0 */
-                    UNS8 TestSlave_obj1804_Compatibility_Entry = 0x0;	/* 0 */
-                    UNS16 TestSlave_obj1804_Event_Timer = 0x0;	/* 0 */
-                    subindex TestSlave_Index1804[] = 
-                     {
-                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1804, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1804_COB_ID_used_by_PDO, NULL },
-                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1804_Transmission_Type, NULL },
-                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1804_Inhibit_Time, NULL },
-                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_obj1804_Compatibility_Entry, NULL },
-                       { RW, uint16, sizeof (UNS16), (void*)&TestSlave_obj1804_Event_Timer, NULL }
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1803_COB_ID_used_by_PDO, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1803_Transmission_Type, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1803_Inhibit_Time, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1803_Compatibility_Entry, NULL },
+                       { RW|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&TestSlave_obj1803_Event_Timer, NULL },
+                       { RW|TO_BE_SAVE, uint8, sizeof (UNS8), (void*)&TestSlave_obj1803_SYNC_start_value, NULL }
                      };
 
 /* index 0x1A00 :   Transmit PDO 1 Mapping. */
-                    UNS8 TestSlave_highestSubIndex_obj1A00 = 10; /* number of subindex - 1*/
+                    UNS8 TestSlave_highestSubIndex_obj1A00 = 8; /* number of subindex - 1*/
                     UNS32 TestSlave_obj1A00[] = 
                     {
-                      0x20000001,	/* 536870913 */
-                      0x20010001,	/* 536936449 */
-                      0x20020001,	/* 537001985 */
-                      0x20030001,	/* 537067521 */
-                      0x20040001,	/* 537133057 */
-                      0x20050001,	/* 537198593 */
-                      0x20060001,	/* 537264129 */
-                      0x20070001,	/* 537329665 */
-                      0x20080008,	/* 537395208 */
-                      0x20090020	/* 537460768 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0	/* 0 */
                     };
                     subindex TestSlave_Index1A00[] = 
                      {
                        { RW, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1A00, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[0], NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[1], NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[2], NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[3], NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[4], NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[5], NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[6], NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[7], NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[8], NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[9], NULL }
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[3], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[4], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[5], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[6], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A00[7], NULL }
                      };
 
 /* index 0x1A01 :   Transmit PDO 2 Mapping. */
-                    UNS8 TestSlave_highestSubIndex_obj1A01 = 1; /* number of subindex - 1*/
+                    UNS8 TestSlave_highestSubIndex_obj1A01 = 8; /* number of subindex - 1*/
                     UNS32 TestSlave_obj1A01[] = 
                     {
-                      0x200A0010	/* 537526288 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0	/* 0 */
                     };
                     subindex TestSlave_Index1A01[] = 
                      {
                        { RW, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1A01, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A01[0], NULL }
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A01[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A01[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A01[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A01[3], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A01[4], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A01[5], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A01[6], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A01[7], NULL }
                      };
 
 /* index 0x1A02 :   Transmit PDO 3 Mapping. */
-                    UNS8 TestSlave_highestSubIndex_obj1A02 = 1; /* number of subindex - 1*/
+                    UNS8 TestSlave_highestSubIndex_obj1A02 = 8; /* number of subindex - 1*/
                     UNS32 TestSlave_obj1A02[] = 
                     {
-                      0x200B0010	/* 537591824 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0	/* 0 */
                     };
                     subindex TestSlave_Index1A02[] = 
                      {
                        { RW, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1A02, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A02[0], NULL }
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A02[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A02[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A02[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A02[3], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A02[4], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A02[5], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A02[6], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A02[7], NULL }
                      };
 
 /* index 0x1A03 :   Transmit PDO 4 Mapping. */
-                    UNS8 TestSlave_highestSubIndex_obj1A03 = 1; /* number of subindex - 1*/
+                    UNS8 TestSlave_highestSubIndex_obj1A03 = 8; /* number of subindex - 1*/
                     UNS32 TestSlave_obj1A03[] = 
                     {
-                      0x200C0010	/* 537657360 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0,	/* 0 */
+                      0x0	/* 0 */
                     };
                     subindex TestSlave_Index1A03[] = 
                      {
                        { RW, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1A03, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A03[0], NULL }
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A03[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A03[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A03[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A03[3], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A03[4], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A03[5], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A03[6], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A03[7], NULL }
                      };
 
-/* index 0x1A04 :   Transmit PDO 5 Mapping. */
-                    UNS8 TestSlave_highestSubIndex_obj1A04 = 1; /* number of subindex - 1*/
-                    UNS32 TestSlave_obj1A04[] = 
-                    {
-                      0x200C0010	/* 537657360 */
-                    };
-                    subindex TestSlave_Index1A04[] = 
-                     {
-                       { RW, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj1A04, NULL },
-                       { RW, uint32, sizeof (UNS32), (void*)&TestSlave_obj1A04[0], NULL }
-                     };
-
-/* index 0x2000 :   Mapped variable SlaveMap1 */
+/* index 0x2000 :   Mapped variable CANopen_Node_ID */
                     subindex TestSlave_Index2000[] = 
                      {
-                       { RW, boolean, sizeof (UNS8), (void*)&SlaveMap1, NULL }
+                       { RO|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&CANopen_Node_ID, NULL }
                      };
 
-/* index 0x2001 :   Mapped variable SlaveMap2 */
+/* index 0x2001 :   Mapped variable CANopen_Baud_Rate */
                     subindex TestSlave_Index2001[] = 
                      {
-                       { RW, boolean, sizeof (UNS8), (void*)&SlaveMap2, NULL }
+                       { RO|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&CANopen_Baud_Rate, NULL }
                      };
 
-/* index 0x2002 :   Mapped variable SlaveMap3 */
+/* index 0x2002 :   Mapped variable Modbus_Node_ID */
                     subindex TestSlave_Index2002[] = 
                      {
-                       { RW, boolean, sizeof (UNS8), (void*)&SlaveMap3, NULL }
+                       { RO|TO_BE_SAVE, uint16, sizeof (UNS16), (void*)&Modbus_Node_ID, NULL }
                      };
 
-/* index 0x2003 :   Mapped variable SlaveMap4 */
+/* index 0x2003 :   Mapped variable Modbus_Baud_Rate */
                     subindex TestSlave_Index2003[] = 
                      {
-                       { RW, boolean, sizeof (UNS8), (void*)&SlaveMap4, NULL }
+                       { RO|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&Modbus_Baud_Rate, NULL }
                      };
 
-/* index 0x2004 :   Mapped variable SlaveMap5 */
-                    subindex TestSlave_Index2004[] = 
+/* index 0x6000 :   Mapped variable Read Inputs 8 Bit */
+                    UNS8 TestSlave_highestSubIndex_obj6000 = 1; /* number of subindex - 1*/
+                    subindex TestSlave_Index6000[] = 
                      {
-                       { RW, boolean, sizeof (UNS8), (void*)&SlaveMap5, NULL }
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj6000, NULL },
+                       { RO, uint8, sizeof (UNS8), (void*)&Read_Inputs_8_Bit[0], NULL }
                      };
 
-/* index 0x2005 :   Mapped variable SlaveMap6 */
-                    subindex TestSlave_Index2005[] = 
+/* index 0x6020 :   Mapped variable Read Input Bit 0x1 to 0x80 */
+                    UNS8 TestSlave_highestSubIndex_obj6020 = 8; /* number of subindex - 1*/
+                    subindex TestSlave_Index6020[] = 
                      {
-                       { RW, boolean, sizeof (UNS8), (void*)&SlaveMap6, NULL }
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj6020, NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Read_Input_Bit_0x1_to_0x80[0], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Read_Input_Bit_0x1_to_0x80[1], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Read_Input_Bit_0x1_to_0x80[2], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Read_Input_Bit_0x1_to_0x80[3], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Read_Input_Bit_0x1_to_0x80[4], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Read_Input_Bit_0x1_to_0x80[5], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Read_Input_Bit_0x1_to_0x80[6], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Read_Input_Bit_0x1_to_0x80[7], NULL }
                      };
 
-/* index 0x2006 :   Mapped variable SlaveMap7 */
-                    subindex TestSlave_Index2006[] = 
+/* index 0x6200 :   Mapped variable Write Outputs 8 Bit */
+                    UNS8 TestSlave_highestSubIndex_obj6200 = 1; /* number of subindex - 1*/
+                    subindex TestSlave_Index6200[] = 
                      {
-                       { RW, boolean, sizeof (UNS8), (void*)&SlaveMap7, NULL }
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj6200, NULL },
+                       { RW, uint8, sizeof (UNS8), (void*)&Write_Outputs_8_Bit[0], NULL }
                      };
 
-/* index 0x2007 :   Mapped variable SlaveMap8 */
-                    subindex TestSlave_Index2007[] = 
+/* index 0x6220 :   Mapped variable Write Outputs Bit 1 to 128 */
+                    UNS8 TestSlave_highestSubIndex_obj6220 = 8; /* number of subindex - 1*/
+                    subindex TestSlave_Index6220[] = 
                      {
-                       { RW, boolean, sizeof (UNS8), (void*)&SlaveMap8, NULL }
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj6220, NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Write_Outputs_Bit_1_to_128[0], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Write_Outputs_Bit_1_to_128[1], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Write_Outputs_Bit_1_to_128[2], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Write_Outputs_Bit_1_to_128[3], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Write_Outputs_Bit_1_to_128[4], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Write_Outputs_Bit_1_to_128[5], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Write_Outputs_Bit_1_to_128[6], NULL },
+                       { RW, boolean, sizeof (UNS8), (void*)&Write_Outputs_Bit_1_to_128[7], NULL }
                      };
 
-/* index 0x2008 :   Mapped variable SlaveMap9 */
-                    subindex TestSlave_Index2008[] = 
+/* index 0x6401 :   Mapped variable Read Analogue Input 16 Bit */
+                    UNS8 TestSlave_highestSubIndex_obj6401 = 4; /* number of subindex - 1*/
+                    subindex TestSlave_Index6401[] = 
                      {
-                       { RW, uint8, sizeof (UNS8), (void*)&SlaveMap9, NULL }
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj6401, NULL },
+                       { RO, int16, sizeof (INTEGER16), (void*)&Read_Analogue_Input_16_Bit[0], NULL },
+                       { RO, int16, sizeof (INTEGER16), (void*)&Read_Analogue_Input_16_Bit[1], NULL },
+                       { RO, int16, sizeof (INTEGER16), (void*)&Read_Analogue_Input_16_Bit[2], NULL },
+                       { RO, int16, sizeof (INTEGER16), (void*)&Read_Analogue_Input_16_Bit[3], NULL }
                      };
 
-/* index 0x2009 :   Mapped variable SlaveMap10 */
-                    subindex TestSlave_Index2009[] = 
+/* index 0x6411 :   Mapped variable Write Analogue Output 16 Bit */
+                    UNS8 TestSlave_highestSubIndex_obj6411 = 2; /* number of subindex - 1*/
+                    subindex TestSlave_Index6411[] = 
                      {
-                       { RW, uint32, sizeof (UNS32), (void*)&SlaveMap10, NULL }
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj6411, NULL },
+                       { RW, int16, sizeof (INTEGER16), (void*)&Write_Analogue_Output_16_Bit[0], NULL },
+                       { RW, int16, sizeof (INTEGER16), (void*)&Write_Analogue_Output_16_Bit[1], NULL }
                      };
 
-/* index 0x200A :   Mapped variable SlaveMap11 */
-                    subindex TestSlave_Index200A[] = 
+/* index 0x642F :   Mapped variable Analogue Input Scaling Float */
+                    UNS8 TestSlave_highestSubIndex_obj642F = 4; /* number of subindex - 1*/
+                    subindex TestSlave_Index642F[] = 
                      {
-                       { RW, uint16, sizeof (UNS16), (void*)&SlaveMap11, NULL }
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj642F, NULL },
+                       { RW|TO_BE_SAVE, real32, sizeof (REAL32), (void*)&Analogue_Input_Scaling_Float[0], NULL },
+                       { RW|TO_BE_SAVE, real32, sizeof (REAL32), (void*)&Analogue_Input_Scaling_Float[1], NULL },
+                       { RW|TO_BE_SAVE, real32, sizeof (REAL32), (void*)&Analogue_Input_Scaling_Float[2], NULL },
+                       { RW|TO_BE_SAVE, real32, sizeof (REAL32), (void*)&Analogue_Input_Scaling_Float[3], NULL }
                      };
 
-/* index 0x200B :   Mapped variable SlaveMap12 */
-                    subindex TestSlave_Index200B[] = 
+/* index 0x6430 :   Mapped variable Analogue Input SI unit */
+                    UNS8 TestSlave_highestSubIndex_obj6430 = 4; /* number of subindex - 1*/
+                    subindex TestSlave_Index6430[] = 
                      {
-                       { RW, int16, sizeof (INTEGER16), (void*)&SlaveMap12, NULL }
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj6430, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&Analogue_Input_SI_unit[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&Analogue_Input_SI_unit[1], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&Analogue_Input_SI_unit[2], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&Analogue_Input_SI_unit[3], NULL }
                      };
 
-/* index 0x200C :   Mapped variable SlaveMap13 */
-                    subindex TestSlave_Index200C[] = 
+/* index 0x6442 :   Mapped variable Analogue Output Scaling Float */
+                    UNS8 TestSlave_highestSubIndex_obj6442 = 2; /* number of subindex - 1*/
+                    subindex TestSlave_Index6442[] = 
                      {
-                       { RW, int16, sizeof (INTEGER16), (void*)&SlaveMap13, NULL }
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj6442, NULL },
+                       { RW|TO_BE_SAVE, real32, sizeof (REAL32), (void*)&Analogue_Output_Scaling_Float[0], NULL },
+                       { RW|TO_BE_SAVE, real32, sizeof (REAL32), (void*)&Analogue_Output_Scaling_Float[1], NULL }
+                     };
+
+/* index 0x6450 :   Mapped variable Analogue Output SI Unit */
+                    UNS8 TestSlave_highestSubIndex_obj6450 = 2; /* number of subindex - 1*/
+                    subindex TestSlave_Index6450[] = 
+                     {
+                       { RO, uint8, sizeof (UNS8), (void*)&TestSlave_highestSubIndex_obj6450, NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&Analogue_Output_SI_Unit[0], NULL },
+                       { RW|TO_BE_SAVE, uint32, sizeof (UNS32), (void*)&Analogue_Output_SI_Unit[1], NULL }
                      };
 
 /**************************************************************************/
@@ -439,38 +703,40 @@ const indextable TestSlave_objdict[] =
 {
   { (subindex*)TestSlave_Index1000,sizeof(TestSlave_Index1000)/sizeof(TestSlave_Index1000[0]), 0x1000},
   { (subindex*)TestSlave_Index1001,sizeof(TestSlave_Index1001)/sizeof(TestSlave_Index1001[0]), 0x1001},
-  { (subindex*)TestSlave_Index1003,sizeof(TestSlave_Index1003)/sizeof(TestSlave_Index1003[0]), 0x1003},
-  { (subindex*)TestSlave_Index1005,sizeof(TestSlave_Index1005)/sizeof(TestSlave_Index1005[0]), 0x1005},
-  { (subindex*)TestSlave_Index1006,sizeof(TestSlave_Index1006)/sizeof(TestSlave_Index1006[0]), 0x1006},
-  { (subindex*)TestSlave_Index1010,sizeof(TestSlave_Index1010)/sizeof(TestSlave_Index1010[0]), 0x1010},
-  { (subindex*)TestSlave_Index1011,sizeof(TestSlave_Index1011)/sizeof(TestSlave_Index1011[0]), 0x1011},
-  { (subindex*)TestSlave_Index1014,sizeof(TestSlave_Index1014)/sizeof(TestSlave_Index1014[0]), 0x1014},
+  { (subindex*)TestSlave_Index1016,sizeof(TestSlave_Index1016)/sizeof(TestSlave_Index1016[0]), 0x1016},
   { (subindex*)TestSlave_Index1017,sizeof(TestSlave_Index1017)/sizeof(TestSlave_Index1017[0]), 0x1017},
   { (subindex*)TestSlave_Index1018,sizeof(TestSlave_Index1018)/sizeof(TestSlave_Index1018[0]), 0x1018},
   { (subindex*)TestSlave_Index1200,sizeof(TestSlave_Index1200)/sizeof(TestSlave_Index1200[0]), 0x1200},
+  { (subindex*)TestSlave_Index1400,sizeof(TestSlave_Index1400)/sizeof(TestSlave_Index1400[0]), 0x1400},
+  { (subindex*)TestSlave_Index1401,sizeof(TestSlave_Index1401)/sizeof(TestSlave_Index1401[0]), 0x1401},
+  { (subindex*)TestSlave_Index1402,sizeof(TestSlave_Index1402)/sizeof(TestSlave_Index1402[0]), 0x1402},
+  { (subindex*)TestSlave_Index1403,sizeof(TestSlave_Index1403)/sizeof(TestSlave_Index1403[0]), 0x1403},
+  { (subindex*)TestSlave_Index1600,sizeof(TestSlave_Index1600)/sizeof(TestSlave_Index1600[0]), 0x1600},
+  { (subindex*)TestSlave_Index1601,sizeof(TestSlave_Index1601)/sizeof(TestSlave_Index1601[0]), 0x1601},
+  { (subindex*)TestSlave_Index1602,sizeof(TestSlave_Index1602)/sizeof(TestSlave_Index1602[0]), 0x1602},
+  { (subindex*)TestSlave_Index1603,sizeof(TestSlave_Index1603)/sizeof(TestSlave_Index1603[0]), 0x1603},
   { (subindex*)TestSlave_Index1800,sizeof(TestSlave_Index1800)/sizeof(TestSlave_Index1800[0]), 0x1800},
   { (subindex*)TestSlave_Index1801,sizeof(TestSlave_Index1801)/sizeof(TestSlave_Index1801[0]), 0x1801},
   { (subindex*)TestSlave_Index1802,sizeof(TestSlave_Index1802)/sizeof(TestSlave_Index1802[0]), 0x1802},
   { (subindex*)TestSlave_Index1803,sizeof(TestSlave_Index1803)/sizeof(TestSlave_Index1803[0]), 0x1803},
-  { (subindex*)TestSlave_Index1804,sizeof(TestSlave_Index1804)/sizeof(TestSlave_Index1804[0]), 0x1804},
   { (subindex*)TestSlave_Index1A00,sizeof(TestSlave_Index1A00)/sizeof(TestSlave_Index1A00[0]), 0x1A00},
   { (subindex*)TestSlave_Index1A01,sizeof(TestSlave_Index1A01)/sizeof(TestSlave_Index1A01[0]), 0x1A01},
   { (subindex*)TestSlave_Index1A02,sizeof(TestSlave_Index1A02)/sizeof(TestSlave_Index1A02[0]), 0x1A02},
   { (subindex*)TestSlave_Index1A03,sizeof(TestSlave_Index1A03)/sizeof(TestSlave_Index1A03[0]), 0x1A03},
-  { (subindex*)TestSlave_Index1A04,sizeof(TestSlave_Index1A04)/sizeof(TestSlave_Index1A04[0]), 0x1A04},
   { (subindex*)TestSlave_Index2000,sizeof(TestSlave_Index2000)/sizeof(TestSlave_Index2000[0]), 0x2000},
   { (subindex*)TestSlave_Index2001,sizeof(TestSlave_Index2001)/sizeof(TestSlave_Index2001[0]), 0x2001},
   { (subindex*)TestSlave_Index2002,sizeof(TestSlave_Index2002)/sizeof(TestSlave_Index2002[0]), 0x2002},
   { (subindex*)TestSlave_Index2003,sizeof(TestSlave_Index2003)/sizeof(TestSlave_Index2003[0]), 0x2003},
-  { (subindex*)TestSlave_Index2004,sizeof(TestSlave_Index2004)/sizeof(TestSlave_Index2004[0]), 0x2004},
-  { (subindex*)TestSlave_Index2005,sizeof(TestSlave_Index2005)/sizeof(TestSlave_Index2005[0]), 0x2005},
-  { (subindex*)TestSlave_Index2006,sizeof(TestSlave_Index2006)/sizeof(TestSlave_Index2006[0]), 0x2006},
-  { (subindex*)TestSlave_Index2007,sizeof(TestSlave_Index2007)/sizeof(TestSlave_Index2007[0]), 0x2007},
-  { (subindex*)TestSlave_Index2008,sizeof(TestSlave_Index2008)/sizeof(TestSlave_Index2008[0]), 0x2008},
-  { (subindex*)TestSlave_Index2009,sizeof(TestSlave_Index2009)/sizeof(TestSlave_Index2009[0]), 0x2009},
-  { (subindex*)TestSlave_Index200A,sizeof(TestSlave_Index200A)/sizeof(TestSlave_Index200A[0]), 0x200A},
-  { (subindex*)TestSlave_Index200B,sizeof(TestSlave_Index200B)/sizeof(TestSlave_Index200B[0]), 0x200B},
-  { (subindex*)TestSlave_Index200C,sizeof(TestSlave_Index200C)/sizeof(TestSlave_Index200C[0]), 0x200C},
+  { (subindex*)TestSlave_Index6000,sizeof(TestSlave_Index6000)/sizeof(TestSlave_Index6000[0]), 0x6000},
+  { (subindex*)TestSlave_Index6020,sizeof(TestSlave_Index6020)/sizeof(TestSlave_Index6020[0]), 0x6020},
+  { (subindex*)TestSlave_Index6200,sizeof(TestSlave_Index6200)/sizeof(TestSlave_Index6200[0]), 0x6200},
+  { (subindex*)TestSlave_Index6220,sizeof(TestSlave_Index6220)/sizeof(TestSlave_Index6220[0]), 0x6220},
+  { (subindex*)TestSlave_Index6401,sizeof(TestSlave_Index6401)/sizeof(TestSlave_Index6401[0]), 0x6401},
+  { (subindex*)TestSlave_Index6411,sizeof(TestSlave_Index6411)/sizeof(TestSlave_Index6411[0]), 0x6411},
+  { (subindex*)TestSlave_Index642F,sizeof(TestSlave_Index642F)/sizeof(TestSlave_Index642F[0]), 0x642F},
+  { (subindex*)TestSlave_Index6430,sizeof(TestSlave_Index6430)/sizeof(TestSlave_Index6430[0]), 0x6430},
+  { (subindex*)TestSlave_Index6442,sizeof(TestSlave_Index6442)/sizeof(TestSlave_Index6442[0]), 0x6442},
+  { (subindex*)TestSlave_Index6450,sizeof(TestSlave_Index6450)/sizeof(TestSlave_Index6450[0]), 0x6450},
 };
 
 const indextable * TestSlave_scanIndexOD (CO_Data *d, UNS16 wIndex, UNS32 * errorCode)
@@ -479,38 +745,40 @@ const indextable * TestSlave_scanIndexOD (CO_Data *d, UNS16 wIndex, UNS32 * erro
 	switch(wIndex){
 		case 0x1000: i = 0;break;
 		case 0x1001: i = 1;break;
-		case 0x1003: i = 2;break;
-		case 0x1005: i = 3;break;
-		case 0x1006: i = 4;break;
-		case 0x1010: i = 5;break;
-		case 0x1011: i = 6;break;
-		case 0x1014: i = 7;break;
-		case 0x1017: i = 8;break;
-		case 0x1018: i = 9;break;
-		case 0x1200: i = 10;break;
-		case 0x1800: i = 11;break;
-		case 0x1801: i = 12;break;
-		case 0x1802: i = 13;break;
-		case 0x1803: i = 14;break;
-		case 0x1804: i = 15;break;
-		case 0x1A00: i = 16;break;
-		case 0x1A01: i = 17;break;
-		case 0x1A02: i = 18;break;
-		case 0x1A03: i = 19;break;
-		case 0x1A04: i = 20;break;
-		case 0x2000: i = 21;break;
-		case 0x2001: i = 22;break;
-		case 0x2002: i = 23;break;
-		case 0x2003: i = 24;break;
-		case 0x2004: i = 25;break;
-		case 0x2005: i = 26;break;
-		case 0x2006: i = 27;break;
-		case 0x2007: i = 28;break;
-		case 0x2008: i = 29;break;
-		case 0x2009: i = 30;break;
-		case 0x200A: i = 31;break;
-		case 0x200B: i = 32;break;
-		case 0x200C: i = 33;break;
+		case 0x1016: i = 2;break;
+		case 0x1017: i = 3;break;
+		case 0x1018: i = 4;break;
+		case 0x1200: i = 5;break;
+		case 0x1400: i = 6;break;
+		case 0x1401: i = 7;break;
+		case 0x1402: i = 8;break;
+		case 0x1403: i = 9;break;
+		case 0x1600: i = 10;break;
+		case 0x1601: i = 11;break;
+		case 0x1602: i = 12;break;
+		case 0x1603: i = 13;break;
+		case 0x1800: i = 14;break;
+		case 0x1801: i = 15;break;
+		case 0x1802: i = 16;break;
+		case 0x1803: i = 17;break;
+		case 0x1A00: i = 18;break;
+		case 0x1A01: i = 19;break;
+		case 0x1A02: i = 20;break;
+		case 0x1A03: i = 21;break;
+		case 0x2000: i = 22;break;
+		case 0x2001: i = 23;break;
+		case 0x2002: i = 24;break;
+		case 0x2003: i = 25;break;
+		case 0x6000: i = 26;break;
+		case 0x6020: i = 27;break;
+		case 0x6200: i = 28;break;
+		case 0x6220: i = 29;break;
+		case 0x6401: i = 30;break;
+		case 0x6411: i = 31;break;
+		case 0x642F: i = 32;break;
+		case 0x6430: i = 33;break;
+		case 0x6442: i = 34;break;
+		case 0x6450: i = 35;break;
 		default:
 			*errorCode = OD_NO_SUCH_OBJECT;
 			return NULL;
@@ -524,27 +792,556 @@ const indextable * TestSlave_scanIndexOD (CO_Data *d, UNS16 wIndex, UNS32 * erro
  * Even if no pdoTransmit are defined, at least one entry is computed
  * for compilations issues.
  */
-s_PDO_status TestSlave_PDO_status[5] = {s_PDO_status_Initializer,s_PDO_status_Initializer,s_PDO_status_Initializer,s_PDO_status_Initializer,s_PDO_status_Initializer};
+s_PDO_status TestSlave_PDO_status[4] = {s_PDO_status_Initializer,s_PDO_status_Initializer,s_PDO_status_Initializer,s_PDO_status_Initializer};
 
 const quick_index TestSlave_firstIndex = {
-  10, /* SDO_SVR */
+  5, /* SDO_SVR */
   0, /* SDO_CLT */
-  0, /* PDO_RCV */
-  0, /* PDO_RCV_MAP */
-  11, /* PDO_TRS */
-  16 /* PDO_TRS_MAP */
+  6, /* PDO_RCV */
+  10, /* PDO_RCV_MAP */
+  14, /* PDO_TRS */
+  18 /* PDO_TRS_MAP */
 };
 
 const quick_index TestSlave_lastIndex = {
-  10, /* SDO_SVR */
+  5, /* SDO_SVR */
   0, /* SDO_CLT */
-  0, /* PDO_RCV */
-  0, /* PDO_RCV_MAP */
-  15, /* PDO_TRS */
-  20 /* PDO_TRS_MAP */
+  9, /* PDO_RCV */
+  13, /* PDO_RCV_MAP */
+  17, /* PDO_TRS */
+  21 /* PDO_TRS_MAP */
 };
 
 const UNS16 TestSlave_ObjdictSize = sizeof(TestSlave_objdict)/sizeof(TestSlave_objdict[0]); 
 
 CO_Data TestSlave_Data = CANOPEN_NODE_DATA_INITIALIZER(TestSlave);
 
+
+const modbus_mapping_t TestSlave_modbus_mapping[] =
+{
+    { 0x0000, 0x1000, 0x00, 2, (((UNS16*)&TestSlave_obj1000)+0) },
+    { 0x0001, 0x1000, 0x00, 2, (((UNS16*)&TestSlave_obj1000)+1) },
+    { 0x0002, 0x1016, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1016)+0) },
+    { 0x0003, 0x1016, 0x01, 2, (((UNS16*)&TestSlave_obj1016[0])+0) },
+    { 0x0004, 0x1016, 0x01, 2, (((UNS16*)&TestSlave_obj1016[0])+1) },
+    { 0x0005, 0x1016, 0x02, 2, (((UNS16*)&TestSlave_obj1016[1])+0) },
+    { 0x0006, 0x1016, 0x02, 2, (((UNS16*)&TestSlave_obj1016[1])+1) },
+    { 0x0007, 0x1016, 0x03, 2, (((UNS16*)&TestSlave_obj1016[2])+0) },
+    { 0x0008, 0x1016, 0x03, 2, (((UNS16*)&TestSlave_obj1016[2])+1) },
+    { 0x0009, 0x1016, 0x04, 2, (((UNS16*)&TestSlave_obj1016[3])+0) },
+    { 0x000A, 0x1016, 0x04, 2, (((UNS16*)&TestSlave_obj1016[3])+1) },
+    { 0x000B, 0x1017, 0x00, 1, (((UNS16*)&TestSlave_obj1017)+0) },
+    { 0x000C, 0x1018, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1018)+0) },
+    { 0x000D, 0x1018, 0x01, 2, (((UNS16*)&TestSlave_obj1018_Vendor_ID)+0) },
+    { 0x000E, 0x1018, 0x01, 2, (((UNS16*)&TestSlave_obj1018_Vendor_ID)+1) },
+    { 0x000F, 0x1018, 0x02, 2, (((UNS16*)&TestSlave_obj1018_Product_Code)+0) },
+    { 0x0010, 0x1018, 0x02, 2, (((UNS16*)&TestSlave_obj1018_Product_Code)+1) },
+    { 0x0011, 0x1018, 0x03, 2, (((UNS16*)&TestSlave_obj1018_Revision_Number)+0) },
+    { 0x0012, 0x1018, 0x03, 2, (((UNS16*)&TestSlave_obj1018_Revision_Number)+1) },
+    { 0x0013, 0x1018, 0x04, 2, (((UNS16*)&TestSlave_obj1018_Serial_Number)+0) },
+    { 0x0014, 0x1018, 0x04, 2, (((UNS16*)&TestSlave_obj1018_Serial_Number)+1) },
+    { 0x0015, 0x1200, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1200)+0) },
+    { 0x0016, 0x1200, 0x01, 2, (((UNS16*)&TestSlave_obj1200_COB_ID_Client_to_Server_Receive_SDO)+0) },
+    { 0x0017, 0x1200, 0x01, 2, (((UNS16*)&TestSlave_obj1200_COB_ID_Client_to_Server_Receive_SDO)+1) },
+    { 0x0018, 0x1200, 0x02, 2, (((UNS16*)&TestSlave_obj1200_COB_ID_Server_to_Client_Transmit_SDO)+0) },
+    { 0x0019, 0x1200, 0x02, 2, (((UNS16*)&TestSlave_obj1200_COB_ID_Server_to_Client_Transmit_SDO)+1) },
+    { 0x001A, 0x1400, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1400)+0) },
+    { 0x001B, 0x1400, 0x01, 2, (((UNS16*)&TestSlave_obj1400_COB_ID_used_by_PDO)+0) },
+    { 0x001C, 0x1400, 0x01, 2, (((UNS16*)&TestSlave_obj1400_COB_ID_used_by_PDO)+1) },
+    { 0x001D, 0x1400, 0x02, 1, (((UNS16*)&TestSlave_obj1400_Transmission_Type)+0) },
+    { 0x001E, 0x1400, 0x03, 1, (((UNS16*)&TestSlave_obj1400_Inhibit_Time)+0) },
+    { 0x001F, 0x1400, 0x04, 1, (((UNS16*)&TestSlave_obj1400_Compatibility_Entry)+0) },
+    { 0x0020, 0x1400, 0x05, 1, (((UNS16*)&TestSlave_obj1400_Event_Timer)+0) },
+    { 0x0021, 0x1400, 0x06, 1, (((UNS16*)&TestSlave_obj1400_SYNC_start_value)+0) },
+    { 0x0022, 0x1401, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1401)+0) },
+    { 0x0023, 0x1401, 0x01, 2, (((UNS16*)&TestSlave_obj1401_COB_ID_used_by_PDO)+0) },
+    { 0x0024, 0x1401, 0x01, 2, (((UNS16*)&TestSlave_obj1401_COB_ID_used_by_PDO)+1) },
+    { 0x0025, 0x1401, 0x02, 1, (((UNS16*)&TestSlave_obj1401_Transmission_Type)+0) },
+    { 0x0026, 0x1401, 0x03, 1, (((UNS16*)&TestSlave_obj1401_Inhibit_Time)+0) },
+    { 0x0027, 0x1401, 0x04, 1, (((UNS16*)&TestSlave_obj1401_Compatibility_Entry)+0) },
+    { 0x0028, 0x1401, 0x05, 1, (((UNS16*)&TestSlave_obj1401_Event_Timer)+0) },
+    { 0x0029, 0x1401, 0x06, 1, (((UNS16*)&TestSlave_obj1401_SYNC_start_value)+0) },
+    { 0x002A, 0x1402, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1402)+0) },
+    { 0x002B, 0x1402, 0x01, 2, (((UNS16*)&TestSlave_obj1402_COB_ID_used_by_PDO)+0) },
+    { 0x002C, 0x1402, 0x01, 2, (((UNS16*)&TestSlave_obj1402_COB_ID_used_by_PDO)+1) },
+    { 0x002D, 0x1402, 0x02, 1, (((UNS16*)&TestSlave_obj1402_Transmission_Type)+0) },
+    { 0x002E, 0x1402, 0x03, 1, (((UNS16*)&TestSlave_obj1402_Inhibit_Time)+0) },
+    { 0x002F, 0x1402, 0x04, 1, (((UNS16*)&TestSlave_obj1402_Compatibility_Entry)+0) },
+    { 0x0030, 0x1402, 0x05, 1, (((UNS16*)&TestSlave_obj1402_Event_Timer)+0) },
+    { 0x0031, 0x1402, 0x06, 1, (((UNS16*)&TestSlave_obj1402_SYNC_start_value)+0) },
+    { 0x0032, 0x1403, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1403)+0) },
+    { 0x0033, 0x1403, 0x01, 2, (((UNS16*)&TestSlave_obj1403_COB_ID_used_by_PDO)+0) },
+    { 0x0034, 0x1403, 0x01, 2, (((UNS16*)&TestSlave_obj1403_COB_ID_used_by_PDO)+1) },
+    { 0x0035, 0x1403, 0x02, 1, (((UNS16*)&TestSlave_obj1403_Transmission_Type)+0) },
+    { 0x0036, 0x1403, 0x03, 1, (((UNS16*)&TestSlave_obj1403_Inhibit_Time)+0) },
+    { 0x0037, 0x1403, 0x04, 1, (((UNS16*)&TestSlave_obj1403_Compatibility_Entry)+0) },
+    { 0x0038, 0x1403, 0x05, 1, (((UNS16*)&TestSlave_obj1403_Event_Timer)+0) },
+    { 0x0039, 0x1403, 0x06, 1, (((UNS16*)&TestSlave_obj1403_SYNC_start_value)+0) },
+    { 0x003A, 0x1600, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1600)+0) },
+    { 0x003B, 0x1600, 0x01, 2, (((UNS16*)&TestSlave_obj1600[0])+0) },
+    { 0x003C, 0x1600, 0x01, 2, (((UNS16*)&TestSlave_obj1600[0])+1) },
+    { 0x003D, 0x1600, 0x02, 2, (((UNS16*)&TestSlave_obj1600[1])+0) },
+    { 0x003E, 0x1600, 0x02, 2, (((UNS16*)&TestSlave_obj1600[1])+1) },
+    { 0x003F, 0x1600, 0x03, 2, (((UNS16*)&TestSlave_obj1600[2])+0) },
+    { 0x0040, 0x1600, 0x03, 2, (((UNS16*)&TestSlave_obj1600[2])+1) },
+    { 0x0041, 0x1600, 0x04, 2, (((UNS16*)&TestSlave_obj1600[3])+0) },
+    { 0x0042, 0x1600, 0x04, 2, (((UNS16*)&TestSlave_obj1600[3])+1) },
+    { 0x0043, 0x1600, 0x05, 2, (((UNS16*)&TestSlave_obj1600[4])+0) },
+    { 0x0044, 0x1600, 0x05, 2, (((UNS16*)&TestSlave_obj1600[4])+1) },
+    { 0x0045, 0x1600, 0x06, 2, (((UNS16*)&TestSlave_obj1600[5])+0) },
+    { 0x0046, 0x1600, 0x06, 2, (((UNS16*)&TestSlave_obj1600[5])+1) },
+    { 0x0047, 0x1600, 0x07, 2, (((UNS16*)&TestSlave_obj1600[6])+0) },
+    { 0x0048, 0x1600, 0x07, 2, (((UNS16*)&TestSlave_obj1600[6])+1) },
+    { 0x0049, 0x1600, 0x08, 2, (((UNS16*)&TestSlave_obj1600[7])+0) },
+    { 0x004A, 0x1600, 0x08, 2, (((UNS16*)&TestSlave_obj1600[7])+1) },
+    { 0x004B, 0x1601, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1601)+0) },
+    { 0x004C, 0x1601, 0x01, 2, (((UNS16*)&TestSlave_obj1601[0])+0) },
+    { 0x004D, 0x1601, 0x01, 2, (((UNS16*)&TestSlave_obj1601[0])+1) },
+    { 0x004E, 0x1601, 0x02, 2, (((UNS16*)&TestSlave_obj1601[1])+0) },
+    { 0x004F, 0x1601, 0x02, 2, (((UNS16*)&TestSlave_obj1601[1])+1) },
+    { 0x0050, 0x1601, 0x03, 2, (((UNS16*)&TestSlave_obj1601[2])+0) },
+    { 0x0051, 0x1601, 0x03, 2, (((UNS16*)&TestSlave_obj1601[2])+1) },
+    { 0x0052, 0x1601, 0x04, 2, (((UNS16*)&TestSlave_obj1601[3])+0) },
+    { 0x0053, 0x1601, 0x04, 2, (((UNS16*)&TestSlave_obj1601[3])+1) },
+    { 0x0054, 0x1601, 0x05, 2, (((UNS16*)&TestSlave_obj1601[4])+0) },
+    { 0x0055, 0x1601, 0x05, 2, (((UNS16*)&TestSlave_obj1601[4])+1) },
+    { 0x0056, 0x1601, 0x06, 2, (((UNS16*)&TestSlave_obj1601[5])+0) },
+    { 0x0057, 0x1601, 0x06, 2, (((UNS16*)&TestSlave_obj1601[5])+1) },
+    { 0x0058, 0x1601, 0x07, 2, (((UNS16*)&TestSlave_obj1601[6])+0) },
+    { 0x0059, 0x1601, 0x07, 2, (((UNS16*)&TestSlave_obj1601[6])+1) },
+    { 0x005A, 0x1601, 0x08, 2, (((UNS16*)&TestSlave_obj1601[7])+0) },
+    { 0x005B, 0x1601, 0x08, 2, (((UNS16*)&TestSlave_obj1601[7])+1) },
+    { 0x005C, 0x1602, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1602)+0) },
+    { 0x005D, 0x1602, 0x01, 2, (((UNS16*)&TestSlave_obj1602[0])+0) },
+    { 0x005E, 0x1602, 0x01, 2, (((UNS16*)&TestSlave_obj1602[0])+1) },
+    { 0x005F, 0x1602, 0x02, 2, (((UNS16*)&TestSlave_obj1602[1])+0) },
+    { 0x0060, 0x1602, 0x02, 2, (((UNS16*)&TestSlave_obj1602[1])+1) },
+    { 0x0061, 0x1602, 0x03, 2, (((UNS16*)&TestSlave_obj1602[2])+0) },
+    { 0x0062, 0x1602, 0x03, 2, (((UNS16*)&TestSlave_obj1602[2])+1) },
+    { 0x0063, 0x1602, 0x04, 2, (((UNS16*)&TestSlave_obj1602[3])+0) },
+    { 0x0064, 0x1602, 0x04, 2, (((UNS16*)&TestSlave_obj1602[3])+1) },
+    { 0x0065, 0x1602, 0x05, 2, (((UNS16*)&TestSlave_obj1602[4])+0) },
+    { 0x0066, 0x1602, 0x05, 2, (((UNS16*)&TestSlave_obj1602[4])+1) },
+    { 0x0067, 0x1602, 0x06, 2, (((UNS16*)&TestSlave_obj1602[5])+0) },
+    { 0x0068, 0x1602, 0x06, 2, (((UNS16*)&TestSlave_obj1602[5])+1) },
+    { 0x0069, 0x1602, 0x07, 2, (((UNS16*)&TestSlave_obj1602[6])+0) },
+    { 0x006A, 0x1602, 0x07, 2, (((UNS16*)&TestSlave_obj1602[6])+1) },
+    { 0x006B, 0x1602, 0x08, 2, (((UNS16*)&TestSlave_obj1602[7])+0) },
+    { 0x006C, 0x1602, 0x08, 2, (((UNS16*)&TestSlave_obj1602[7])+1) },
+    { 0x006D, 0x1603, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1603)+0) },
+    { 0x006E, 0x1603, 0x01, 2, (((UNS16*)&TestSlave_obj1603[0])+0) },
+    { 0x006F, 0x1603, 0x01, 2, (((UNS16*)&TestSlave_obj1603[0])+1) },
+    { 0x0070, 0x1603, 0x02, 2, (((UNS16*)&TestSlave_obj1603[1])+0) },
+    { 0x0071, 0x1603, 0x02, 2, (((UNS16*)&TestSlave_obj1603[1])+1) },
+    { 0x0072, 0x1603, 0x03, 2, (((UNS16*)&TestSlave_obj1603[2])+0) },
+    { 0x0073, 0x1603, 0x03, 2, (((UNS16*)&TestSlave_obj1603[2])+1) },
+    { 0x0074, 0x1603, 0x04, 2, (((UNS16*)&TestSlave_obj1603[3])+0) },
+    { 0x0075, 0x1603, 0x04, 2, (((UNS16*)&TestSlave_obj1603[3])+1) },
+    { 0x0076, 0x1603, 0x05, 2, (((UNS16*)&TestSlave_obj1603[4])+0) },
+    { 0x0077, 0x1603, 0x05, 2, (((UNS16*)&TestSlave_obj1603[4])+1) },
+    { 0x0078, 0x1603, 0x06, 2, (((UNS16*)&TestSlave_obj1603[5])+0) },
+    { 0x0079, 0x1603, 0x06, 2, (((UNS16*)&TestSlave_obj1603[5])+1) },
+    { 0x007A, 0x1603, 0x07, 2, (((UNS16*)&TestSlave_obj1603[6])+0) },
+    { 0x007B, 0x1603, 0x07, 2, (((UNS16*)&TestSlave_obj1603[6])+1) },
+    { 0x007C, 0x1603, 0x08, 2, (((UNS16*)&TestSlave_obj1603[7])+0) },
+    { 0x007D, 0x1603, 0x08, 2, (((UNS16*)&TestSlave_obj1603[7])+1) },
+    { 0x007E, 0x1800, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1800)+0) },
+    { 0x007F, 0x1800, 0x01, 2, (((UNS16*)&TestSlave_obj1800_COB_ID_used_by_PDO)+0) },
+    { 0x0080, 0x1800, 0x01, 2, (((UNS16*)&TestSlave_obj1800_COB_ID_used_by_PDO)+1) },
+    { 0x0081, 0x1800, 0x02, 1, (((UNS16*)&TestSlave_obj1800_Transmission_Type)+0) },
+    { 0x0082, 0x1800, 0x03, 1, (((UNS16*)&TestSlave_obj1800_Inhibit_Time)+0) },
+    { 0x0083, 0x1800, 0x04, 1, (((UNS16*)&TestSlave_obj1800_Compatibility_Entry)+0) },
+    { 0x0084, 0x1800, 0x05, 1, (((UNS16*)&TestSlave_obj1800_Event_Timer)+0) },
+    { 0x0085, 0x1800, 0x06, 1, (((UNS16*)&TestSlave_obj1800_SYNC_start_value)+0) },
+    { 0x0086, 0x1801, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1801)+0) },
+    { 0x0087, 0x1801, 0x01, 2, (((UNS16*)&TestSlave_obj1801_COB_ID_used_by_PDO)+0) },
+    { 0x0088, 0x1801, 0x01, 2, (((UNS16*)&TestSlave_obj1801_COB_ID_used_by_PDO)+1) },
+    { 0x0089, 0x1801, 0x02, 1, (((UNS16*)&TestSlave_obj1801_Transmission_Type)+0) },
+    { 0x008A, 0x1801, 0x03, 1, (((UNS16*)&TestSlave_obj1801_Inhibit_Time)+0) },
+    { 0x008B, 0x1801, 0x04, 1, (((UNS16*)&TestSlave_obj1801_Compatibility_Entry)+0) },
+    { 0x008C, 0x1801, 0x05, 1, (((UNS16*)&TestSlave_obj1801_Event_Timer)+0) },
+    { 0x008D, 0x1801, 0x06, 1, (((UNS16*)&TestSlave_obj1801_SYNC_start_value)+0) },
+    { 0x008E, 0x1802, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1802)+0) },
+    { 0x008F, 0x1802, 0x01, 2, (((UNS16*)&TestSlave_obj1802_COB_ID_used_by_PDO)+0) },
+    { 0x0090, 0x1802, 0x01, 2, (((UNS16*)&TestSlave_obj1802_COB_ID_used_by_PDO)+1) },
+    { 0x0091, 0x1802, 0x02, 1, (((UNS16*)&TestSlave_obj1802_Transmission_Type)+0) },
+    { 0x0092, 0x1802, 0x03, 1, (((UNS16*)&TestSlave_obj1802_Inhibit_Time)+0) },
+    { 0x0093, 0x1802, 0x04, 1, (((UNS16*)&TestSlave_obj1802_Compatibility_Entry)+0) },
+    { 0x0094, 0x1802, 0x05, 1, (((UNS16*)&TestSlave_obj1802_Event_Timer)+0) },
+    { 0x0095, 0x1802, 0x06, 1, (((UNS16*)&TestSlave_obj1802_SYNC_start_value)+0) },
+    { 0x0096, 0x1803, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1803)+0) },
+    { 0x0097, 0x1803, 0x01, 2, (((UNS16*)&TestSlave_obj1803_COB_ID_used_by_PDO)+0) },
+    { 0x0098, 0x1803, 0x01, 2, (((UNS16*)&TestSlave_obj1803_COB_ID_used_by_PDO)+1) },
+    { 0x0099, 0x1803, 0x02, 1, (((UNS16*)&TestSlave_obj1803_Transmission_Type)+0) },
+    { 0x009A, 0x1803, 0x03, 1, (((UNS16*)&TestSlave_obj1803_Inhibit_Time)+0) },
+    { 0x009B, 0x1803, 0x04, 1, (((UNS16*)&TestSlave_obj1803_Compatibility_Entry)+0) },
+    { 0x009C, 0x1803, 0x05, 1, (((UNS16*)&TestSlave_obj1803_Event_Timer)+0) },
+    { 0x009D, 0x1803, 0x06, 1, (((UNS16*)&TestSlave_obj1803_SYNC_start_value)+0) },
+    { 0x009E, 0x1A00, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1A00)+0) },
+    { 0x009F, 0x1A00, 0x01, 2, (((UNS16*)&TestSlave_obj1A00[0])+0) },
+    { 0x00A0, 0x1A00, 0x01, 2, (((UNS16*)&TestSlave_obj1A00[0])+1) },
+    { 0x00A1, 0x1A00, 0x02, 2, (((UNS16*)&TestSlave_obj1A00[1])+0) },
+    { 0x00A2, 0x1A00, 0x02, 2, (((UNS16*)&TestSlave_obj1A00[1])+1) },
+    { 0x00A3, 0x1A00, 0x03, 2, (((UNS16*)&TestSlave_obj1A00[2])+0) },
+    { 0x00A4, 0x1A00, 0x03, 2, (((UNS16*)&TestSlave_obj1A00[2])+1) },
+    { 0x00A5, 0x1A00, 0x04, 2, (((UNS16*)&TestSlave_obj1A00[3])+0) },
+    { 0x00A6, 0x1A00, 0x04, 2, (((UNS16*)&TestSlave_obj1A00[3])+1) },
+    { 0x00A7, 0x1A00, 0x05, 2, (((UNS16*)&TestSlave_obj1A00[4])+0) },
+    { 0x00A8, 0x1A00, 0x05, 2, (((UNS16*)&TestSlave_obj1A00[4])+1) },
+    { 0x00A9, 0x1A00, 0x06, 2, (((UNS16*)&TestSlave_obj1A00[5])+0) },
+    { 0x00AA, 0x1A00, 0x06, 2, (((UNS16*)&TestSlave_obj1A00[5])+1) },
+    { 0x00AB, 0x1A00, 0x07, 2, (((UNS16*)&TestSlave_obj1A00[6])+0) },
+    { 0x00AC, 0x1A00, 0x07, 2, (((UNS16*)&TestSlave_obj1A00[6])+1) },
+    { 0x00AD, 0x1A00, 0x08, 2, (((UNS16*)&TestSlave_obj1A00[7])+0) },
+    { 0x00AE, 0x1A00, 0x08, 2, (((UNS16*)&TestSlave_obj1A00[7])+1) },
+    { 0x00AF, 0x1A01, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1A01)+0) },
+    { 0x00B0, 0x1A01, 0x01, 2, (((UNS16*)&TestSlave_obj1A01[0])+0) },
+    { 0x00B1, 0x1A01, 0x01, 2, (((UNS16*)&TestSlave_obj1A01[0])+1) },
+    { 0x00B2, 0x1A01, 0x02, 2, (((UNS16*)&TestSlave_obj1A01[1])+0) },
+    { 0x00B3, 0x1A01, 0x02, 2, (((UNS16*)&TestSlave_obj1A01[1])+1) },
+    { 0x00B4, 0x1A01, 0x03, 2, (((UNS16*)&TestSlave_obj1A01[2])+0) },
+    { 0x00B5, 0x1A01, 0x03, 2, (((UNS16*)&TestSlave_obj1A01[2])+1) },
+    { 0x00B6, 0x1A01, 0x04, 2, (((UNS16*)&TestSlave_obj1A01[3])+0) },
+    { 0x00B7, 0x1A01, 0x04, 2, (((UNS16*)&TestSlave_obj1A01[3])+1) },
+    { 0x00B8, 0x1A01, 0x05, 2, (((UNS16*)&TestSlave_obj1A01[4])+0) },
+    { 0x00B9, 0x1A01, 0x05, 2, (((UNS16*)&TestSlave_obj1A01[4])+1) },
+    { 0x00BA, 0x1A01, 0x06, 2, (((UNS16*)&TestSlave_obj1A01[5])+0) },
+    { 0x00BB, 0x1A01, 0x06, 2, (((UNS16*)&TestSlave_obj1A01[5])+1) },
+    { 0x00BC, 0x1A01, 0x07, 2, (((UNS16*)&TestSlave_obj1A01[6])+0) },
+    { 0x00BD, 0x1A01, 0x07, 2, (((UNS16*)&TestSlave_obj1A01[6])+1) },
+    { 0x00BE, 0x1A01, 0x08, 2, (((UNS16*)&TestSlave_obj1A01[7])+0) },
+    { 0x00BF, 0x1A01, 0x08, 2, (((UNS16*)&TestSlave_obj1A01[7])+1) },
+    { 0x00C0, 0x1A02, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1A02)+0) },
+    { 0x00C1, 0x1A02, 0x01, 2, (((UNS16*)&TestSlave_obj1A02[0])+0) },
+    { 0x00C2, 0x1A02, 0x01, 2, (((UNS16*)&TestSlave_obj1A02[0])+1) },
+    { 0x00C3, 0x1A02, 0x02, 2, (((UNS16*)&TestSlave_obj1A02[1])+0) },
+    { 0x00C4, 0x1A02, 0x02, 2, (((UNS16*)&TestSlave_obj1A02[1])+1) },
+    { 0x00C5, 0x1A02, 0x03, 2, (((UNS16*)&TestSlave_obj1A02[2])+0) },
+    { 0x00C6, 0x1A02, 0x03, 2, (((UNS16*)&TestSlave_obj1A02[2])+1) },
+    { 0x00C7, 0x1A02, 0x04, 2, (((UNS16*)&TestSlave_obj1A02[3])+0) },
+    { 0x00C8, 0x1A02, 0x04, 2, (((UNS16*)&TestSlave_obj1A02[3])+1) },
+    { 0x00C9, 0x1A02, 0x05, 2, (((UNS16*)&TestSlave_obj1A02[4])+0) },
+    { 0x00CA, 0x1A02, 0x05, 2, (((UNS16*)&TestSlave_obj1A02[4])+1) },
+    { 0x00CB, 0x1A02, 0x06, 2, (((UNS16*)&TestSlave_obj1A02[5])+0) },
+    { 0x00CC, 0x1A02, 0x06, 2, (((UNS16*)&TestSlave_obj1A02[5])+1) },
+    { 0x00CD, 0x1A02, 0x07, 2, (((UNS16*)&TestSlave_obj1A02[6])+0) },
+    { 0x00CE, 0x1A02, 0x07, 2, (((UNS16*)&TestSlave_obj1A02[6])+1) },
+    { 0x00CF, 0x1A02, 0x08, 2, (((UNS16*)&TestSlave_obj1A02[7])+0) },
+    { 0x00D0, 0x1A02, 0x08, 2, (((UNS16*)&TestSlave_obj1A02[7])+1) },
+    { 0x00D1, 0x1A03, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj1A03)+0) },
+    { 0x00D2, 0x1A03, 0x01, 2, (((UNS16*)&TestSlave_obj1A03[0])+0) },
+    { 0x00D3, 0x1A03, 0x01, 2, (((UNS16*)&TestSlave_obj1A03[0])+1) },
+    { 0x00D4, 0x1A03, 0x02, 2, (((UNS16*)&TestSlave_obj1A03[1])+0) },
+    { 0x00D5, 0x1A03, 0x02, 2, (((UNS16*)&TestSlave_obj1A03[1])+1) },
+    { 0x00D6, 0x1A03, 0x03, 2, (((UNS16*)&TestSlave_obj1A03[2])+0) },
+    { 0x00D7, 0x1A03, 0x03, 2, (((UNS16*)&TestSlave_obj1A03[2])+1) },
+    { 0x00D8, 0x1A03, 0x04, 2, (((UNS16*)&TestSlave_obj1A03[3])+0) },
+    { 0x00D9, 0x1A03, 0x04, 2, (((UNS16*)&TestSlave_obj1A03[3])+1) },
+    { 0x00DA, 0x1A03, 0x05, 2, (((UNS16*)&TestSlave_obj1A03[4])+0) },
+    { 0x00DB, 0x1A03, 0x05, 2, (((UNS16*)&TestSlave_obj1A03[4])+1) },
+    { 0x00DC, 0x1A03, 0x06, 2, (((UNS16*)&TestSlave_obj1A03[5])+0) },
+    { 0x00DD, 0x1A03, 0x06, 2, (((UNS16*)&TestSlave_obj1A03[5])+1) },
+    { 0x00DE, 0x1A03, 0x07, 2, (((UNS16*)&TestSlave_obj1A03[6])+0) },
+    { 0x00DF, 0x1A03, 0x07, 2, (((UNS16*)&TestSlave_obj1A03[6])+1) },
+    { 0x00E0, 0x1A03, 0x08, 2, (((UNS16*)&TestSlave_obj1A03[7])+0) },
+    { 0x00E1, 0x1A03, 0x08, 2, (((UNS16*)&TestSlave_obj1A03[7])+1) },
+    { 0x00E2, 0x2000, 0x00, 1, (((UNS16*)&CANopen_Node_ID)+0) },
+    { 0x00E3, 0x2001, 0x00, 2, (((UNS16*)&CANopen_Baud_Rate)+0) },
+    { 0x00E4, 0x2001, 0x00, 2, (((UNS16*)&CANopen_Baud_Rate)+1) },
+    { 0x00E5, 0x2002, 0x00, 1, (((UNS16*)&Modbus_Node_ID)+0) },
+    { 0x00E6, 0x2003, 0x00, 2, (((UNS16*)&Modbus_Baud_Rate)+0) },
+    { 0x00E7, 0x2003, 0x00, 2, (((UNS16*)&Modbus_Baud_Rate)+1) },
+    { 0x00E8, 0x6000, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj6000)+0) },
+    { 0x00E9, 0x6000, 0x01, 1, (((UNS16*)&Read_Inputs_8_Bit[0])+0) },
+    { 0x00EA, 0x6020, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj6020)+0) },
+    { 0x00EB, 0x6020, 0x01, 1, (((UNS16*)&Read_Input_Bit_0x1_to_0x80[0])+0) },
+    { 0x00EC, 0x6020, 0x02, 1, (((UNS16*)&Read_Input_Bit_0x1_to_0x80[1])+0) },
+    { 0x00ED, 0x6020, 0x03, 1, (((UNS16*)&Read_Input_Bit_0x1_to_0x80[2])+0) },
+    { 0x00EE, 0x6020, 0x04, 1, (((UNS16*)&Read_Input_Bit_0x1_to_0x80[3])+0) },
+    { 0x00EF, 0x6020, 0x05, 1, (((UNS16*)&Read_Input_Bit_0x1_to_0x80[4])+0) },
+    { 0x00F0, 0x6020, 0x06, 1, (((UNS16*)&Read_Input_Bit_0x1_to_0x80[5])+0) },
+    { 0x00F1, 0x6020, 0x07, 1, (((UNS16*)&Read_Input_Bit_0x1_to_0x80[6])+0) },
+    { 0x00F2, 0x6020, 0x08, 1, (((UNS16*)&Read_Input_Bit_0x1_to_0x80[7])+0) },
+    { 0x00F3, 0x6200, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj6200)+0) },
+    { 0x00F4, 0x6200, 0x01, 1, (((UNS16*)&Write_Outputs_8_Bit[0])+0) },
+    { 0x00F5, 0x6220, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj6220)+0) },
+    { 0x00F6, 0x6220, 0x01, 1, (((UNS16*)&Write_Outputs_Bit_1_to_128[0])+0) },
+    { 0x00F7, 0x6220, 0x02, 1, (((UNS16*)&Write_Outputs_Bit_1_to_128[1])+0) },
+    { 0x00F8, 0x6220, 0x03, 1, (((UNS16*)&Write_Outputs_Bit_1_to_128[2])+0) },
+    { 0x00F9, 0x6220, 0x04, 1, (((UNS16*)&Write_Outputs_Bit_1_to_128[3])+0) },
+    { 0x00FA, 0x6220, 0x05, 1, (((UNS16*)&Write_Outputs_Bit_1_to_128[4])+0) },
+    { 0x00FB, 0x6220, 0x06, 1, (((UNS16*)&Write_Outputs_Bit_1_to_128[5])+0) },
+    { 0x00FC, 0x6220, 0x07, 1, (((UNS16*)&Write_Outputs_Bit_1_to_128[6])+0) },
+    { 0x00FD, 0x6220, 0x08, 1, (((UNS16*)&Write_Outputs_Bit_1_to_128[7])+0) },
+    { 0x00FE, 0x6401, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj6401)+0) },
+    { 0x00FF, 0x6401, 0x01, 1, (((UNS16*)&Read_Analogue_Input_16_Bit[0])+0) },
+    { 0x0100, 0x6401, 0x02, 1, (((UNS16*)&Read_Analogue_Input_16_Bit[1])+0) },
+    { 0x0101, 0x6401, 0x03, 1, (((UNS16*)&Read_Analogue_Input_16_Bit[2])+0) },
+    { 0x0102, 0x6401, 0x04, 1, (((UNS16*)&Read_Analogue_Input_16_Bit[3])+0) },
+    { 0x0103, 0x6411, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj6411)+0) },
+    { 0x0104, 0x6411, 0x01, 1, (((UNS16*)&Write_Analogue_Output_16_Bit[0])+0) },
+    { 0x0105, 0x6411, 0x02, 1, (((UNS16*)&Write_Analogue_Output_16_Bit[1])+0) },
+    { 0x0106, 0x642F, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj642F)+0) },
+    { 0x0107, 0x642F, 0x01, 2, (((UNS16*)&Analogue_Input_Scaling_Float[0])+0) },
+    { 0x0108, 0x642F, 0x01, 2, (((UNS16*)&Analogue_Input_Scaling_Float[0])+1) },
+    { 0x0109, 0x642F, 0x02, 2, (((UNS16*)&Analogue_Input_Scaling_Float[1])+0) },
+    { 0x010A, 0x642F, 0x02, 2, (((UNS16*)&Analogue_Input_Scaling_Float[1])+1) },
+    { 0x010B, 0x642F, 0x03, 2, (((UNS16*)&Analogue_Input_Scaling_Float[2])+0) },
+    { 0x010C, 0x642F, 0x03, 2, (((UNS16*)&Analogue_Input_Scaling_Float[2])+1) },
+    { 0x010D, 0x642F, 0x04, 2, (((UNS16*)&Analogue_Input_Scaling_Float[3])+0) },
+    { 0x010E, 0x642F, 0x04, 2, (((UNS16*)&Analogue_Input_Scaling_Float[3])+1) },
+    { 0x010F, 0x6430, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj6430)+0) },
+    { 0x0110, 0x6430, 0x01, 2, (((UNS16*)&Analogue_Input_SI_unit[0])+0) },
+    { 0x0111, 0x6430, 0x01, 2, (((UNS16*)&Analogue_Input_SI_unit[0])+1) },
+    { 0x0112, 0x6430, 0x02, 2, (((UNS16*)&Analogue_Input_SI_unit[1])+0) },
+    { 0x0113, 0x6430, 0x02, 2, (((UNS16*)&Analogue_Input_SI_unit[1])+1) },
+    { 0x0114, 0x6430, 0x03, 2, (((UNS16*)&Analogue_Input_SI_unit[2])+0) },
+    { 0x0115, 0x6430, 0x03, 2, (((UNS16*)&Analogue_Input_SI_unit[2])+1) },
+    { 0x0116, 0x6430, 0x04, 2, (((UNS16*)&Analogue_Input_SI_unit[3])+0) },
+    { 0x0117, 0x6430, 0x04, 2, (((UNS16*)&Analogue_Input_SI_unit[3])+1) },
+    { 0x0118, 0x6442, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj6442)+0) },
+    { 0x0119, 0x6442, 0x01, 2, (((UNS16*)&Analogue_Output_Scaling_Float[0])+0) },
+    { 0x011A, 0x6442, 0x01, 2, (((UNS16*)&Analogue_Output_Scaling_Float[0])+1) },
+    { 0x011B, 0x6442, 0x02, 2, (((UNS16*)&Analogue_Output_Scaling_Float[1])+0) },
+    { 0x011C, 0x6442, 0x02, 2, (((UNS16*)&Analogue_Output_Scaling_Float[1])+1) },
+    { 0x011D, 0x6450, 0x00, 1, (((UNS16*)&TestSlave_highestSubIndex_obj6450)+0) },
+    { 0x011E, 0x6450, 0x01, 2, (((UNS16*)&Analogue_Output_SI_Unit[0])+0) },
+    { 0x011F, 0x6450, 0x01, 2, (((UNS16*)&Analogue_Output_SI_Unit[0])+1) },
+    { 0x0120, 0x6450, 0x02, 2, (((UNS16*)&Analogue_Output_SI_Unit[1])+0) },
+    { 0x0121, 0x6450, 0x02, 2, (((UNS16*)&Analogue_Output_SI_Unit[1])+1) },
+};
+
+
+const to_be_saved_t TestSlave_to_be_saved[] =
+{
+    { 0x0000, 0x1000, 0x00, 2, (((UNS16*)&TestSlave_obj1000)+0) },
+    { 0x0001, 0x1000, 0x00, 2, (((UNS16*)&TestSlave_obj1000)+1) },
+    { 0x0002, 0x1016, 0x01, 2, (((UNS16*)&TestSlave_obj1016[0])+0) },
+    { 0x0003, 0x1016, 0x01, 2, (((UNS16*)&TestSlave_obj1016[0])+1) },
+    { 0x0004, 0x1016, 0x02, 2, (((UNS16*)&TestSlave_obj1016[1])+0) },
+    { 0x0005, 0x1016, 0x02, 2, (((UNS16*)&TestSlave_obj1016[1])+1) },
+    { 0x0006, 0x1016, 0x03, 2, (((UNS16*)&TestSlave_obj1016[2])+0) },
+    { 0x0007, 0x1016, 0x03, 2, (((UNS16*)&TestSlave_obj1016[2])+1) },
+    { 0x0008, 0x1016, 0x04, 2, (((UNS16*)&TestSlave_obj1016[3])+0) },
+    { 0x0009, 0x1016, 0x04, 2, (((UNS16*)&TestSlave_obj1016[3])+1) },
+    { 0x000A, 0x1017, 0x00, 1, (((UNS16*)&TestSlave_obj1017)+0) },
+    { 0x000B, 0x1018, 0x01, 2, (((UNS16*)&TestSlave_obj1018_Vendor_ID)+0) },
+    { 0x000C, 0x1018, 0x01, 2, (((UNS16*)&TestSlave_obj1018_Vendor_ID)+1) },
+    { 0x000D, 0x1018, 0x02, 2, (((UNS16*)&TestSlave_obj1018_Product_Code)+0) },
+    { 0x000E, 0x1018, 0x02, 2, (((UNS16*)&TestSlave_obj1018_Product_Code)+1) },
+    { 0x000F, 0x1018, 0x03, 2, (((UNS16*)&TestSlave_obj1018_Revision_Number)+0) },
+    { 0x0010, 0x1018, 0x03, 2, (((UNS16*)&TestSlave_obj1018_Revision_Number)+1) },
+    { 0x0011, 0x1018, 0x04, 2, (((UNS16*)&TestSlave_obj1018_Serial_Number)+0) },
+    { 0x0012, 0x1018, 0x04, 2, (((UNS16*)&TestSlave_obj1018_Serial_Number)+1) },
+    { 0x0013, 0x1200, 0x01, 2, (((UNS16*)&TestSlave_obj1200_COB_ID_Client_to_Server_Receive_SDO)+0) },
+    { 0x0014, 0x1200, 0x01, 2, (((UNS16*)&TestSlave_obj1200_COB_ID_Client_to_Server_Receive_SDO)+1) },
+    { 0x0015, 0x1200, 0x02, 2, (((UNS16*)&TestSlave_obj1200_COB_ID_Server_to_Client_Transmit_SDO)+0) },
+    { 0x0016, 0x1200, 0x02, 2, (((UNS16*)&TestSlave_obj1200_COB_ID_Server_to_Client_Transmit_SDO)+1) },
+    { 0x0017, 0x1400, 0x01, 2, (((UNS16*)&TestSlave_obj1400_COB_ID_used_by_PDO)+0) },
+    { 0x0018, 0x1400, 0x01, 2, (((UNS16*)&TestSlave_obj1400_COB_ID_used_by_PDO)+1) },
+    { 0x0019, 0x1400, 0x02, 1, (((UNS16*)&TestSlave_obj1400_Transmission_Type)+0) },
+    { 0x001A, 0x1400, 0x03, 1, (((UNS16*)&TestSlave_obj1400_Inhibit_Time)+0) },
+    { 0x001B, 0x1400, 0x04, 1, (((UNS16*)&TestSlave_obj1400_Compatibility_Entry)+0) },
+    { 0x001C, 0x1400, 0x05, 1, (((UNS16*)&TestSlave_obj1400_Event_Timer)+0) },
+    { 0x001D, 0x1400, 0x06, 1, (((UNS16*)&TestSlave_obj1400_SYNC_start_value)+0) },
+    { 0x001E, 0x1401, 0x01, 2, (((UNS16*)&TestSlave_obj1401_COB_ID_used_by_PDO)+0) },
+    { 0x001F, 0x1401, 0x01, 2, (((UNS16*)&TestSlave_obj1401_COB_ID_used_by_PDO)+1) },
+    { 0x0020, 0x1401, 0x02, 1, (((UNS16*)&TestSlave_obj1401_Transmission_Type)+0) },
+    { 0x0021, 0x1401, 0x03, 1, (((UNS16*)&TestSlave_obj1401_Inhibit_Time)+0) },
+    { 0x0022, 0x1401, 0x04, 1, (((UNS16*)&TestSlave_obj1401_Compatibility_Entry)+0) },
+    { 0x0023, 0x1401, 0x05, 1, (((UNS16*)&TestSlave_obj1401_Event_Timer)+0) },
+    { 0x0024, 0x1401, 0x06, 1, (((UNS16*)&TestSlave_obj1401_SYNC_start_value)+0) },
+    { 0x0025, 0x1402, 0x01, 2, (((UNS16*)&TestSlave_obj1402_COB_ID_used_by_PDO)+0) },
+    { 0x0026, 0x1402, 0x01, 2, (((UNS16*)&TestSlave_obj1402_COB_ID_used_by_PDO)+1) },
+    { 0x0027, 0x1402, 0x02, 1, (((UNS16*)&TestSlave_obj1402_Transmission_Type)+0) },
+    { 0x0028, 0x1402, 0x03, 1, (((UNS16*)&TestSlave_obj1402_Inhibit_Time)+0) },
+    { 0x0029, 0x1402, 0x04, 1, (((UNS16*)&TestSlave_obj1402_Compatibility_Entry)+0) },
+    { 0x002A, 0x1402, 0x05, 1, (((UNS16*)&TestSlave_obj1402_Event_Timer)+0) },
+    { 0x002B, 0x1402, 0x06, 1, (((UNS16*)&TestSlave_obj1402_SYNC_start_value)+0) },
+    { 0x002C, 0x1403, 0x01, 2, (((UNS16*)&TestSlave_obj1403_COB_ID_used_by_PDO)+0) },
+    { 0x002D, 0x1403, 0x01, 2, (((UNS16*)&TestSlave_obj1403_COB_ID_used_by_PDO)+1) },
+    { 0x002E, 0x1403, 0x02, 1, (((UNS16*)&TestSlave_obj1403_Transmission_Type)+0) },
+    { 0x002F, 0x1403, 0x03, 1, (((UNS16*)&TestSlave_obj1403_Inhibit_Time)+0) },
+    { 0x0030, 0x1403, 0x04, 1, (((UNS16*)&TestSlave_obj1403_Compatibility_Entry)+0) },
+    { 0x0031, 0x1403, 0x05, 1, (((UNS16*)&TestSlave_obj1403_Event_Timer)+0) },
+    { 0x0032, 0x1403, 0x06, 1, (((UNS16*)&TestSlave_obj1403_SYNC_start_value)+0) },
+    { 0x0033, 0x1600, 0x01, 2, (((UNS16*)&TestSlave_obj1600[0])+0) },
+    { 0x0034, 0x1600, 0x01, 2, (((UNS16*)&TestSlave_obj1600[0])+1) },
+    { 0x0035, 0x1600, 0x02, 2, (((UNS16*)&TestSlave_obj1600[1])+0) },
+    { 0x0036, 0x1600, 0x02, 2, (((UNS16*)&TestSlave_obj1600[1])+1) },
+    { 0x0037, 0x1600, 0x03, 2, (((UNS16*)&TestSlave_obj1600[2])+0) },
+    { 0x0038, 0x1600, 0x03, 2, (((UNS16*)&TestSlave_obj1600[2])+1) },
+    { 0x0039, 0x1600, 0x04, 2, (((UNS16*)&TestSlave_obj1600[3])+0) },
+    { 0x003A, 0x1600, 0x04, 2, (((UNS16*)&TestSlave_obj1600[3])+1) },
+    { 0x003B, 0x1600, 0x05, 2, (((UNS16*)&TestSlave_obj1600[4])+0) },
+    { 0x003C, 0x1600, 0x05, 2, (((UNS16*)&TestSlave_obj1600[4])+1) },
+    { 0x003D, 0x1600, 0x06, 2, (((UNS16*)&TestSlave_obj1600[5])+0) },
+    { 0x003E, 0x1600, 0x06, 2, (((UNS16*)&TestSlave_obj1600[5])+1) },
+    { 0x003F, 0x1600, 0x07, 2, (((UNS16*)&TestSlave_obj1600[6])+0) },
+    { 0x0040, 0x1600, 0x07, 2, (((UNS16*)&TestSlave_obj1600[6])+1) },
+    { 0x0041, 0x1600, 0x08, 2, (((UNS16*)&TestSlave_obj1600[7])+0) },
+    { 0x0042, 0x1600, 0x08, 2, (((UNS16*)&TestSlave_obj1600[7])+1) },
+    { 0x0043, 0x1601, 0x01, 2, (((UNS16*)&TestSlave_obj1601[0])+0) },
+    { 0x0044, 0x1601, 0x01, 2, (((UNS16*)&TestSlave_obj1601[0])+1) },
+    { 0x0045, 0x1601, 0x02, 2, (((UNS16*)&TestSlave_obj1601[1])+0) },
+    { 0x0046, 0x1601, 0x02, 2, (((UNS16*)&TestSlave_obj1601[1])+1) },
+    { 0x0047, 0x1601, 0x03, 2, (((UNS16*)&TestSlave_obj1601[2])+0) },
+    { 0x0048, 0x1601, 0x03, 2, (((UNS16*)&TestSlave_obj1601[2])+1) },
+    { 0x0049, 0x1601, 0x04, 2, (((UNS16*)&TestSlave_obj1601[3])+0) },
+    { 0x004A, 0x1601, 0x04, 2, (((UNS16*)&TestSlave_obj1601[3])+1) },
+    { 0x004B, 0x1601, 0x05, 2, (((UNS16*)&TestSlave_obj1601[4])+0) },
+    { 0x004C, 0x1601, 0x05, 2, (((UNS16*)&TestSlave_obj1601[4])+1) },
+    { 0x004D, 0x1601, 0x06, 2, (((UNS16*)&TestSlave_obj1601[5])+0) },
+    { 0x004E, 0x1601, 0x06, 2, (((UNS16*)&TestSlave_obj1601[5])+1) },
+    { 0x004F, 0x1601, 0x07, 2, (((UNS16*)&TestSlave_obj1601[6])+0) },
+    { 0x0050, 0x1601, 0x07, 2, (((UNS16*)&TestSlave_obj1601[6])+1) },
+    { 0x0051, 0x1601, 0x08, 2, (((UNS16*)&TestSlave_obj1601[7])+0) },
+    { 0x0052, 0x1601, 0x08, 2, (((UNS16*)&TestSlave_obj1601[7])+1) },
+    { 0x0053, 0x1602, 0x01, 2, (((UNS16*)&TestSlave_obj1602[0])+0) },
+    { 0x0054, 0x1602, 0x01, 2, (((UNS16*)&TestSlave_obj1602[0])+1) },
+    { 0x0055, 0x1602, 0x02, 2, (((UNS16*)&TestSlave_obj1602[1])+0) },
+    { 0x0056, 0x1602, 0x02, 2, (((UNS16*)&TestSlave_obj1602[1])+1) },
+    { 0x0057, 0x1602, 0x03, 2, (((UNS16*)&TestSlave_obj1602[2])+0) },
+    { 0x0058, 0x1602, 0x03, 2, (((UNS16*)&TestSlave_obj1602[2])+1) },
+    { 0x0059, 0x1602, 0x04, 2, (((UNS16*)&TestSlave_obj1602[3])+0) },
+    { 0x005A, 0x1602, 0x04, 2, (((UNS16*)&TestSlave_obj1602[3])+1) },
+    { 0x005B, 0x1602, 0x05, 2, (((UNS16*)&TestSlave_obj1602[4])+0) },
+    { 0x005C, 0x1602, 0x05, 2, (((UNS16*)&TestSlave_obj1602[4])+1) },
+    { 0x005D, 0x1602, 0x06, 2, (((UNS16*)&TestSlave_obj1602[5])+0) },
+    { 0x005E, 0x1602, 0x06, 2, (((UNS16*)&TestSlave_obj1602[5])+1) },
+    { 0x005F, 0x1602, 0x07, 2, (((UNS16*)&TestSlave_obj1602[6])+0) },
+    { 0x0060, 0x1602, 0x07, 2, (((UNS16*)&TestSlave_obj1602[6])+1) },
+    { 0x0061, 0x1602, 0x08, 2, (((UNS16*)&TestSlave_obj1602[7])+0) },
+    { 0x0062, 0x1602, 0x08, 2, (((UNS16*)&TestSlave_obj1602[7])+1) },
+    { 0x0063, 0x1603, 0x01, 2, (((UNS16*)&TestSlave_obj1603[0])+0) },
+    { 0x0064, 0x1603, 0x01, 2, (((UNS16*)&TestSlave_obj1603[0])+1) },
+    { 0x0065, 0x1603, 0x02, 2, (((UNS16*)&TestSlave_obj1603[1])+0) },
+    { 0x0066, 0x1603, 0x02, 2, (((UNS16*)&TestSlave_obj1603[1])+1) },
+    { 0x0067, 0x1603, 0x03, 2, (((UNS16*)&TestSlave_obj1603[2])+0) },
+    { 0x0068, 0x1603, 0x03, 2, (((UNS16*)&TestSlave_obj1603[2])+1) },
+    { 0x0069, 0x1603, 0x04, 2, (((UNS16*)&TestSlave_obj1603[3])+0) },
+    { 0x006A, 0x1603, 0x04, 2, (((UNS16*)&TestSlave_obj1603[3])+1) },
+    { 0x006B, 0x1603, 0x05, 2, (((UNS16*)&TestSlave_obj1603[4])+0) },
+    { 0x006C, 0x1603, 0x05, 2, (((UNS16*)&TestSlave_obj1603[4])+1) },
+    { 0x006D, 0x1603, 0x06, 2, (((UNS16*)&TestSlave_obj1603[5])+0) },
+    { 0x006E, 0x1603, 0x06, 2, (((UNS16*)&TestSlave_obj1603[5])+1) },
+    { 0x006F, 0x1603, 0x07, 2, (((UNS16*)&TestSlave_obj1603[6])+0) },
+    { 0x0070, 0x1603, 0x07, 2, (((UNS16*)&TestSlave_obj1603[6])+1) },
+    { 0x0071, 0x1603, 0x08, 2, (((UNS16*)&TestSlave_obj1603[7])+0) },
+    { 0x0072, 0x1603, 0x08, 2, (((UNS16*)&TestSlave_obj1603[7])+1) },
+    { 0x0073, 0x1800, 0x01, 2, (((UNS16*)&TestSlave_obj1800_COB_ID_used_by_PDO)+0) },
+    { 0x0074, 0x1800, 0x01, 2, (((UNS16*)&TestSlave_obj1800_COB_ID_used_by_PDO)+1) },
+    { 0x0075, 0x1800, 0x02, 1, (((UNS16*)&TestSlave_obj1800_Transmission_Type)+0) },
+    { 0x0076, 0x1800, 0x03, 1, (((UNS16*)&TestSlave_obj1800_Inhibit_Time)+0) },
+    { 0x0077, 0x1800, 0x04, 1, (((UNS16*)&TestSlave_obj1800_Compatibility_Entry)+0) },
+    { 0x0078, 0x1800, 0x05, 1, (((UNS16*)&TestSlave_obj1800_Event_Timer)+0) },
+    { 0x0079, 0x1800, 0x06, 1, (((UNS16*)&TestSlave_obj1800_SYNC_start_value)+0) },
+    { 0x007A, 0x1802, 0x01, 2, (((UNS16*)&TestSlave_obj1802_COB_ID_used_by_PDO)+0) },
+    { 0x007B, 0x1802, 0x01, 2, (((UNS16*)&TestSlave_obj1802_COB_ID_used_by_PDO)+1) },
+    { 0x007C, 0x1802, 0x02, 1, (((UNS16*)&TestSlave_obj1802_Transmission_Type)+0) },
+    { 0x007D, 0x1802, 0x03, 1, (((UNS16*)&TestSlave_obj1802_Inhibit_Time)+0) },
+    { 0x007E, 0x1802, 0x04, 1, (((UNS16*)&TestSlave_obj1802_Compatibility_Entry)+0) },
+    { 0x007F, 0x1802, 0x05, 1, (((UNS16*)&TestSlave_obj1802_Event_Timer)+0) },
+    { 0x0080, 0x1802, 0x06, 1, (((UNS16*)&TestSlave_obj1802_SYNC_start_value)+0) },
+    { 0x0081, 0x1803, 0x01, 2, (((UNS16*)&TestSlave_obj1803_COB_ID_used_by_PDO)+0) },
+    { 0x0082, 0x1803, 0x01, 2, (((UNS16*)&TestSlave_obj1803_COB_ID_used_by_PDO)+1) },
+    { 0x0083, 0x1803, 0x02, 1, (((UNS16*)&TestSlave_obj1803_Transmission_Type)+0) },
+    { 0x0084, 0x1803, 0x03, 1, (((UNS16*)&TestSlave_obj1803_Inhibit_Time)+0) },
+    { 0x0085, 0x1803, 0x04, 1, (((UNS16*)&TestSlave_obj1803_Compatibility_Entry)+0) },
+    { 0x0086, 0x1803, 0x05, 1, (((UNS16*)&TestSlave_obj1803_Event_Timer)+0) },
+    { 0x0087, 0x1803, 0x06, 1, (((UNS16*)&TestSlave_obj1803_SYNC_start_value)+0) },
+    { 0x0088, 0x1A00, 0x01, 2, (((UNS16*)&TestSlave_obj1A00[0])+0) },
+    { 0x0089, 0x1A00, 0x01, 2, (((UNS16*)&TestSlave_obj1A00[0])+1) },
+    { 0x008A, 0x1A00, 0x02, 2, (((UNS16*)&TestSlave_obj1A00[1])+0) },
+    { 0x008B, 0x1A00, 0x02, 2, (((UNS16*)&TestSlave_obj1A00[1])+1) },
+    { 0x008C, 0x1A00, 0x03, 2, (((UNS16*)&TestSlave_obj1A00[2])+0) },
+    { 0x008D, 0x1A00, 0x03, 2, (((UNS16*)&TestSlave_obj1A00[2])+1) },
+    { 0x008E, 0x1A00, 0x04, 2, (((UNS16*)&TestSlave_obj1A00[3])+0) },
+    { 0x008F, 0x1A00, 0x04, 2, (((UNS16*)&TestSlave_obj1A00[3])+1) },
+    { 0x0090, 0x1A00, 0x05, 2, (((UNS16*)&TestSlave_obj1A00[4])+0) },
+    { 0x0091, 0x1A00, 0x05, 2, (((UNS16*)&TestSlave_obj1A00[4])+1) },
+    { 0x0092, 0x1A00, 0x06, 2, (((UNS16*)&TestSlave_obj1A00[5])+0) },
+    { 0x0093, 0x1A00, 0x06, 2, (((UNS16*)&TestSlave_obj1A00[5])+1) },
+    { 0x0094, 0x1A00, 0x07, 2, (((UNS16*)&TestSlave_obj1A00[6])+0) },
+    { 0x0095, 0x1A00, 0x07, 2, (((UNS16*)&TestSlave_obj1A00[6])+1) },
+    { 0x0096, 0x1A00, 0x08, 2, (((UNS16*)&TestSlave_obj1A00[7])+0) },
+    { 0x0097, 0x1A00, 0x08, 2, (((UNS16*)&TestSlave_obj1A00[7])+1) },
+    { 0x0098, 0x1A01, 0x01, 2, (((UNS16*)&TestSlave_obj1A01[0])+0) },
+    { 0x0099, 0x1A01, 0x01, 2, (((UNS16*)&TestSlave_obj1A01[0])+1) },
+    { 0x009A, 0x1A01, 0x02, 2, (((UNS16*)&TestSlave_obj1A01[1])+0) },
+    { 0x009B, 0x1A01, 0x02, 2, (((UNS16*)&TestSlave_obj1A01[1])+1) },
+    { 0x009C, 0x1A01, 0x03, 2, (((UNS16*)&TestSlave_obj1A01[2])+0) },
+    { 0x009D, 0x1A01, 0x03, 2, (((UNS16*)&TestSlave_obj1A01[2])+1) },
+    { 0x009E, 0x1A01, 0x04, 2, (((UNS16*)&TestSlave_obj1A01[3])+0) },
+    { 0x009F, 0x1A01, 0x04, 2, (((UNS16*)&TestSlave_obj1A01[3])+1) },
+    { 0x00A0, 0x1A01, 0x05, 2, (((UNS16*)&TestSlave_obj1A01[4])+0) },
+    { 0x00A1, 0x1A01, 0x05, 2, (((UNS16*)&TestSlave_obj1A01[4])+1) },
+    { 0x00A2, 0x1A01, 0x06, 2, (((UNS16*)&TestSlave_obj1A01[5])+0) },
+    { 0x00A3, 0x1A01, 0x06, 2, (((UNS16*)&TestSlave_obj1A01[5])+1) },
+    { 0x00A4, 0x1A01, 0x07, 2, (((UNS16*)&TestSlave_obj1A01[6])+0) },
+    { 0x00A5, 0x1A01, 0x07, 2, (((UNS16*)&TestSlave_obj1A01[6])+1) },
+    { 0x00A6, 0x1A01, 0x08, 2, (((UNS16*)&TestSlave_obj1A01[7])+0) },
+    { 0x00A7, 0x1A01, 0x08, 2, (((UNS16*)&TestSlave_obj1A01[7])+1) },
+    { 0x00A8, 0x1A02, 0x01, 2, (((UNS16*)&TestSlave_obj1A02[0])+0) },
+    { 0x00A9, 0x1A02, 0x01, 2, (((UNS16*)&TestSlave_obj1A02[0])+1) },
+    { 0x00AA, 0x1A02, 0x02, 2, (((UNS16*)&TestSlave_obj1A02[1])+0) },
+    { 0x00AB, 0x1A02, 0x02, 2, (((UNS16*)&TestSlave_obj1A02[1])+1) },
+    { 0x00AC, 0x1A02, 0x03, 2, (((UNS16*)&TestSlave_obj1A02[2])+0) },
+    { 0x00AD, 0x1A02, 0x03, 2, (((UNS16*)&TestSlave_obj1A02[2])+1) },
+    { 0x00AE, 0x1A02, 0x04, 2, (((UNS16*)&TestSlave_obj1A02[3])+0) },
+    { 0x00AF, 0x1A02, 0x04, 2, (((UNS16*)&TestSlave_obj1A02[3])+1) },
+    { 0x00B0, 0x1A02, 0x05, 2, (((UNS16*)&TestSlave_obj1A02[4])+0) },
+    { 0x00B1, 0x1A02, 0x05, 2, (((UNS16*)&TestSlave_obj1A02[4])+1) },
+    { 0x00B2, 0x1A02, 0x06, 2, (((UNS16*)&TestSlave_obj1A02[5])+0) },
+    { 0x00B3, 0x1A02, 0x06, 2, (((UNS16*)&TestSlave_obj1A02[5])+1) },
+    { 0x00B4, 0x1A02, 0x07, 2, (((UNS16*)&TestSlave_obj1A02[6])+0) },
+    { 0x00B5, 0x1A02, 0x07, 2, (((UNS16*)&TestSlave_obj1A02[6])+1) },
+    { 0x00B6, 0x1A02, 0x08, 2, (((UNS16*)&TestSlave_obj1A02[7])+0) },
+    { 0x00B7, 0x1A02, 0x08, 2, (((UNS16*)&TestSlave_obj1A02[7])+1) },
+    { 0x00B8, 0x1A03, 0x01, 2, (((UNS16*)&TestSlave_obj1A03[0])+0) },
+    { 0x00B9, 0x1A03, 0x01, 2, (((UNS16*)&TestSlave_obj1A03[0])+1) },
+    { 0x00BA, 0x1A03, 0x02, 2, (((UNS16*)&TestSlave_obj1A03[1])+0) },
+    { 0x00BB, 0x1A03, 0x02, 2, (((UNS16*)&TestSlave_obj1A03[1])+1) },
+    { 0x00BC, 0x1A03, 0x03, 2, (((UNS16*)&TestSlave_obj1A03[2])+0) },
+    { 0x00BD, 0x1A03, 0x03, 2, (((UNS16*)&TestSlave_obj1A03[2])+1) },
+    { 0x00BE, 0x1A03, 0x04, 2, (((UNS16*)&TestSlave_obj1A03[3])+0) },
+    { 0x00BF, 0x1A03, 0x04, 2, (((UNS16*)&TestSlave_obj1A03[3])+1) },
+    { 0x00C0, 0x1A03, 0x05, 2, (((UNS16*)&TestSlave_obj1A03[4])+0) },
+    { 0x00C1, 0x1A03, 0x05, 2, (((UNS16*)&TestSlave_obj1A03[4])+1) },
+    { 0x00C2, 0x1A03, 0x06, 2, (((UNS16*)&TestSlave_obj1A03[5])+0) },
+    { 0x00C3, 0x1A03, 0x06, 2, (((UNS16*)&TestSlave_obj1A03[5])+1) },
+    { 0x00C4, 0x1A03, 0x07, 2, (((UNS16*)&TestSlave_obj1A03[6])+0) },
+    { 0x00C5, 0x1A03, 0x07, 2, (((UNS16*)&TestSlave_obj1A03[6])+1) },
+    { 0x00C6, 0x1A03, 0x08, 2, (((UNS16*)&TestSlave_obj1A03[7])+0) },
+    { 0x00C7, 0x1A03, 0x08, 2, (((UNS16*)&TestSlave_obj1A03[7])+1) },
+    { 0x00C8, 0x2000, 0x00, 1, (((UNS16*)&CANopen_Node_ID)+0) },
+    { 0x00C9, 0x2001, 0x00, 2, (((UNS16*)&CANopen_Baud_Rate)+0) },
+    { 0x00CA, 0x2001, 0x00, 2, (((UNS16*)&CANopen_Baud_Rate)+1) },
+    { 0x00CB, 0x2002, 0x00, 1, (((UNS16*)&Modbus_Node_ID)+0) },
+    { 0x00CC, 0x2003, 0x00, 2, (((UNS16*)&Modbus_Baud_Rate)+0) },
+    { 0x00CD, 0x2003, 0x00, 2, (((UNS16*)&Modbus_Baud_Rate)+1) },
+    { 0x00CE, 0x642F, 0x01, 2, (((UNS16*)&Analogue_Input_Scaling_Float[0])+0) },
+    { 0x00CF, 0x642F, 0x01, 2, (((UNS16*)&Analogue_Input_Scaling_Float[0])+1) },
+    { 0x00D0, 0x642F, 0x02, 2, (((UNS16*)&Analogue_Input_Scaling_Float[1])+0) },
+    { 0x00D1, 0x642F, 0x02, 2, (((UNS16*)&Analogue_Input_Scaling_Float[1])+1) },
+    { 0x00D2, 0x642F, 0x03, 2, (((UNS16*)&Analogue_Input_Scaling_Float[2])+0) },
+    { 0x00D3, 0x642F, 0x03, 2, (((UNS16*)&Analogue_Input_Scaling_Float[2])+1) },
+    { 0x00D4, 0x642F, 0x04, 2, (((UNS16*)&Analogue_Input_Scaling_Float[3])+0) },
+    { 0x00D5, 0x642F, 0x04, 2, (((UNS16*)&Analogue_Input_Scaling_Float[3])+1) },
+    { 0x00D6, 0x6430, 0x01, 2, (((UNS16*)&Analogue_Input_SI_unit[0])+0) },
+    { 0x00D7, 0x6430, 0x01, 2, (((UNS16*)&Analogue_Input_SI_unit[0])+1) },
+    { 0x00D8, 0x6430, 0x02, 2, (((UNS16*)&Analogue_Input_SI_unit[1])+0) },
+    { 0x00D9, 0x6430, 0x02, 2, (((UNS16*)&Analogue_Input_SI_unit[1])+1) },
+    { 0x00DA, 0x6430, 0x03, 2, (((UNS16*)&Analogue_Input_SI_unit[2])+0) },
+    { 0x00DB, 0x6430, 0x03, 2, (((UNS16*)&Analogue_Input_SI_unit[2])+1) },
+    { 0x00DC, 0x6430, 0x04, 2, (((UNS16*)&Analogue_Input_SI_unit[3])+0) },
+    { 0x00DD, 0x6430, 0x04, 2, (((UNS16*)&Analogue_Input_SI_unit[3])+1) },
+    { 0x00DE, 0x6442, 0x01, 2, (((UNS16*)&Analogue_Output_Scaling_Float[0])+0) },
+    { 0x00DF, 0x6442, 0x01, 2, (((UNS16*)&Analogue_Output_Scaling_Float[0])+1) },
+    { 0x00E0, 0x6442, 0x02, 2, (((UNS16*)&Analogue_Output_Scaling_Float[1])+0) },
+    { 0x00E1, 0x6442, 0x02, 2, (((UNS16*)&Analogue_Output_Scaling_Float[1])+1) },
+    { 0x00E2, 0x6450, 0x01, 2, (((UNS16*)&Analogue_Output_SI_Unit[0])+0) },
+    { 0x00E3, 0x6450, 0x01, 2, (((UNS16*)&Analogue_Output_SI_Unit[0])+1) },
+    { 0x00E4, 0x6450, 0x02, 2, (((UNS16*)&Analogue_Output_SI_Unit[1])+0) },
+    { 0x00E5, 0x6450, 0x02, 2, (((UNS16*)&Analogue_Output_SI_Unit[1])+1) },
+};

@@ -1,110 +1,74 @@
-/*
- * FreeModbus Libary: BARE Demo Application
- * Copyright (C) 2006 Christian Walter <wolti@sil.at>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- * File: $Id: demo.c,v 1.1 2006/08/22 21:35:13 wolti Exp $
- */
-
-/* ----------------------- System includes --------------------------------*/
-
-/* ----------------------- Modbus includes ----------------------------------*/
 #include "mb.h"
 #include "mbport.h"
 
-/* ----------------------- Defines ------------------------------------------*/
-#define REG_INPUT_START 1000
-#define REG_INPUT_NREGS 4
-#define SLAVE_ID 0x0A
-
-/* ----------------------- Static variables ---------------------------------*/
-static USHORT   usRegInputStart = REG_INPUT_START;
-static USHORT   usRegInputBuf[REG_INPUT_NREGS];
+//    MB_ENOREG,                  /*!< illegal register address. */
+//    MB_EINVAL,                  /*!< illegal argument. */
 
 eMBErrorCode
-eMBRegInputCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs )
+readOD( USHORT usIndex, UCHAR * pucRegBuffer, USHORT usNRegs )
 {
-    eMBErrorCode    eStatus = MB_ENOERR;
-    int             iRegIndex;
+    const indextable *odEntry;
+    UNS32 errorCode;
+    ODCallback_t *CallbackList;
+    UNS8 subIndex;
+    UNS32 subIndexSizeInByte, subIndexSizeInShort, odSizeInShort = 0;
 
-    if( ( usAddress >= REG_INPUT_START )
-        && ( usAddress + usNRegs <= REG_INPUT_START + REG_INPUT_NREGS ) )
-    {
-        iRegIndex = ( int )( usAddress - usRegInputStart );
-        while( usNRegs > 0 )
-        {
-            *pucRegBuffer++ =
-                ( unsigned char )( usRegInputBuf[iRegIndex] >> 8 );
-            *pucRegBuffer++ =
-                ( unsigned char )( usRegInputBuf[iRegIndex] & 0xFF );
-            iRegIndex++;
-            usNRegs--;
+    odEntry = scanIndexOD (d, wIndex, &errorCode, &CallbackList);
+    if (errorCode != OD_SUCCESSFUL) {
+        return MB_ENOREG;
+    }
+
+    odSizeInShort = 0;
+    for (subIndex = 0; subIndex < odEntry->nSubCount; subIndex++) {
+        if (odEntry->pSubindex[subIndex].bAccessType & WO) {
+            // If a subindex is not readable
+            accessDictionaryError(usIndex, subIndex, 0, 0, OD_READ_NOT_ALLOWED);
+            return MB_ENOREG;
         }
-    }
-    else
-    {
-        eStatus = MB_ENOREG;
+
+        subIndexSizeInByte = odEntry->pSubindex[subIndex].size;
+        subIndexSizeInShort = (subIndexSizeInByte / 2) + (subIndexSizeInByte % 2);
+        odSizeInShort += subIndexSizeInShort;
     }
 
-    return eStatus;
+    if (odSizeInShort != usNRegs) {
+        return MB_EINVAL;
+    }
+
+    for (subIndex = 0; subIndex < odEntry->nSubCount; subIndex++) {
+    }
 }
 
+eMBErrorCode
+writeOD( USHORT usIndex, UCHAR * pucRegBuffer, USHORT usNRegs )
+{
+    // TODO
+    return MB_EINVAL;
+}
+
+// Only accept reading/writing holding registors. The usAddress is OD index of CO_Data, and
+// usNRegs must match OD size. subIndexes of an OD entry will be padded to 16-bits.
 eMBErrorCode
 eMBRegHoldingCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs, eMBRegisterMode eMode )
 {
     eMBErrorCode    eStatus = MB_ENOERR;
     int             iRegIndex;
 
-    if (eMode == MB_REG_READ)
-    {
-        if( ( usAddress >= REG_INPUT_START )
-            && ( usAddress + usNRegs <= REG_INPUT_START + REG_INPUT_NREGS ) )
-        {
-            iRegIndex = ( int )( usAddress - usRegInputStart );
-            while( usNRegs > 0 )
-            {
-                *pucRegBuffer++ =
-                    ( unsigned char )( usRegInputBuf[iRegIndex] >> 8 );
-                *pucRegBuffer++ =
-                    ( unsigned char )( usRegInputBuf[iRegIndex] & 0xFF );
-                iRegIndex++;
-                usNRegs--;
-            }
-        }
+    if (eMode == MB_REG_READ) {
+        eStatus = readOD(usAddress, pucRegBuffer, usNRegs);
     }
-
-    if (eMode == MB_REG_WRITE)
-    {
-        if( ( usAddress >= REG_INPUT_START )
-            && ( usAddress + usNRegs <= REG_INPUT_START + REG_INPUT_NREGS ) )
-        {
-            iRegIndex = ( int )( usAddress - usRegInputStart );
-            while( usNRegs > 0 )
-            {
-                usRegInputBuf[iRegIndex] =  ((unsigned int) *pucRegBuffer << 8) | ((unsigned int) *(pucRegBuffer+1));
-                pucRegBuffer+=2;
-                iRegIndex++;
-                usNRegs--;
-            }
-        }
+    else if (eMode == MB_REG_WRITE) {
+        eStatus = writeOD(usAddress, pucRegBuffer, usNRegs);
     }
 
     return eStatus;
 }
 
+eMBErrorCode
+eMBRegInputCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs )
+{
+    return MB_ENOREG;
+}
 
 eMBErrorCode
 eMBRegCoilsCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNCoils,

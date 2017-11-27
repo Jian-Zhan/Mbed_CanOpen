@@ -9,8 +9,7 @@
 
 #include "mbed.h"
 #include "canfestival.h"
-#include "mbed_slave.h"
-#include "ds401.h"
+#include "TestSlave.h"
 #include "port_helper.h"
 #include "mb.h"
 #include "eeprom_flash.h"
@@ -34,8 +33,8 @@ int main()
     // Start of CANopen stack calls
     canInit();              // Initialize the CANopen bus
     initTimer();                // Start timer for the CANopen stack
-    setNodeId(&mbed_slave_Data, CAN_NODE_ID);
-    setState(&mbed_slave_Data, Initialisation);
+    setNodeId(&TestSlave_Data, CAN_NODE_ID);
+    setState(&TestSlave_Data, Initialisation);
 
     // Start of Modbus stack calls
     eMBErrorCode eStatus;
@@ -49,7 +48,7 @@ int main()
             // interrupts need to be disabled here
             __disable_irq();
             // process it
-            canDispatch(&mbed_slave_Data, &m);
+            canDispatch(&TestSlave_Data, &m);
             // and re-enabled here
             __enable_irq();
             // print it to the console for debugging

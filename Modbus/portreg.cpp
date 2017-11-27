@@ -7,36 +7,8 @@
 eMBErrorCode
 readOD( USHORT usIndex, UCHAR * pucRegBuffer, USHORT usNRegs )
 {
-    const indextable *odEntry;
-    UNS32 errorCode;
-    ODCallback_t *CallbackList;
-    UNS8 subIndex;
-    UNS32 subIndexSizeInByte, subIndexSizeInShort, odSizeInShort = 0;
-
-    odEntry = scanIndexOD (d, wIndex, &errorCode, &CallbackList);
-    if (errorCode != OD_SUCCESSFUL) {
-        return MB_ENOREG;
-    }
-
-    odSizeInShort = 0;
-    for (subIndex = 0; subIndex < odEntry->nSubCount; subIndex++) {
-        if (odEntry->pSubindex[subIndex].bAccessType & WO) {
-            // If a subindex is not readable
-            accessDictionaryError(usIndex, subIndex, 0, 0, OD_READ_NOT_ALLOWED);
-            return MB_ENOREG;
-        }
-
-        subIndexSizeInByte = odEntry->pSubindex[subIndex].size;
-        subIndexSizeInShort = (subIndexSizeInByte / 2) + (subIndexSizeInByte % 2);
-        odSizeInShort += subIndexSizeInShort;
-    }
-
-    if (odSizeInShort != usNRegs) {
-        return MB_EINVAL;
-    }
-
-    for (subIndex = 0; subIndex < odEntry->nSubCount; subIndex++) {
-    }
+    // TODO
+    return MB_EINVAL;
 }
 
 eMBErrorCode

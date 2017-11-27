@@ -12,9 +12,11 @@
 #include "mbed_slave.h"
 #include "ds401.h"
 #include "port_helper.h"
+#include "mb.h"
 #include "eeprom_flash.h"
 
 #define CAN_NODE_ID 0x04
+#define MODBUS_NODE_ID 0x04
 
 // Set used for main program timing control
 Ticker SysTimer;
@@ -29,17 +31,20 @@ int main()
     printf("EEPROM %d\n", readEEPROMWord(0));
     SysTimer.attach_us(&blinkLED, 1000);
 
-    // start of CANfestival stack calls
+    // Start of CANopen stack calls
     canInit();              // Initialize the CANopen bus
     initTimer();                // Start timer for the CANopen stack
-
-    // Init the state
     setNodeId(&mbed_slave_Data, CAN_NODE_ID);
     setState(&mbed_slave_Data, Initialisation);
 
+    // Start of Modbus stack calls
+    eMBErrorCode eStatus;
+    eStatus = eMBInit(MB_RTU, MODBUS_NODE_ID, 0, 115200, MB_PAR_NONE);
+    eStatus = eMBEnable();
+
     // just keep looping
     while(1) {
-        // a message was received - pass it to the CANstack
+        // CANopen poll
         if (canReceive(&m)) {
             // interrupts need to be disabled here
             __disable_irq();
@@ -54,6 +59,9 @@ int main()
             writeEEPROMWord(0, m.cob_id);
             disableEEPROMWriting();
         }
+
+        // Modbus poll
+        (void)eMBPoll();
     }
 }
 
